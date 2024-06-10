@@ -85,8 +85,8 @@ console.log((echo("첫째", 2) ** echo("둘째", 3)) ** echo("셋째", 2));
 
 
 #### reference
-1. https://mgyo.tistory.com/227
-2. https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Operator_precedence
-3. https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Expressions_and_operators
-4. https://velog.io/@bami/Javascript-%EC%82%B0%EC%88%A0-%EC%97%B0%EC%82%B0%EC%9E%90
-5. https://jenny-daru.tistory.com/8
+1. [https://mgyo.tistory.com/227]()
+2. [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Operator_precedence]()
+3. [https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Expressions_and_operators]()
+4. [https://velog.io/@bami/Javascript-%EC%82%B0%EC%88%A0-%EC%97%B0%EC%82%B0%EC%9E%90]()
+5. [https://jenny-daru.tistory.com/8]()
