@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Publications"
+title: "Publications 1주일에 한번씩 기술 리뷰"
 permalink: /publications/
 author_profile: true
 ---
