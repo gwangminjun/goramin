@@ -9,37 +9,26 @@ redirect_from:
 
 {% include base_path %}
 
-Education
+experience
 ======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
-
-Work experience
-======
-* Spring 2024: Academic Pages Collaborator
-  * Github University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
-
-* Fall 2015: Research Assistant
-  * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
-
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+* DATA-HUB
+  * API 데이터 수집 및 관리 시스템
+  * 주요기능
+    * 다양한 API 소스 통합
+    * 데이터 표준화 및 변환
+    * 데이터 관리 및 모니터링 시스템
+  * 성과
+    * 다양한 API 소스에서 데이터를 실시간으로 수집하여 데이터 가시성을 향상
+    * 데이터 품질 개선 및 중복 데이터 제거로 인해 데이터 분석의 정확성 향상
   
-Skills
+tech
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Front-end : CSS, HTML , Javascript, JQuery
+* Back-end : Java , Spring Boot , Spring Legacy , PostgresSQL
+* Deployment : Git , Git-Hub
+* Libraries and Tools: Maven , OpenLayers , GeoServer , Tiles , MyBatis , Three.js  , Cesium.js
+* Development Env : Intellij IDEA , Notepad++ , VS Code
+* Note-taking : Notion , Markdown , Git-Hub
 
 Publications
 ======
@@ -52,8 +41,8 @@ Talks
   <ul>{% for post in site.talks reversed %}
     {% include archive-single-talk-cv.html  %}
   {% endfor %}</ul>
-  
-Teaching
+
+algorithm
 ======
   <ul>{% for post in site.teaching reversed %}
     {% include archive-single-cv.html %}
