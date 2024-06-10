@@ -200,7 +200,7 @@ kramdown:
 
 # Collections
 collections:
-  algorithm:
+  teaching:
     output: true
     permalink: /:collection/:path/
   publications:
@@ -234,10 +234,10 @@ defaults:
     values:
       layout: single
       author_profile: true
-  # _algorithm
+  # _teaching
   - scope:
       path: ""
-      type: algorithm
+      type: teaching
     values:
       layout: single
       author_profile: true
