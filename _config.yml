@@ -7,9 +7,9 @@
 # server process.
 
 # Basic Site Settings
-locale                   : "en-US"
-title                    : "minJunYang / goraMin"
-title_separator          : "life come to be gora"
+locale                   : "ko-KR"
+title                    : "goramin blog"
+title_separator          : ""
 name                     : &name "minJunYang"
 description              : &description "personal description"
 url                      : https://gwangminjun.github.io/goramin # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"

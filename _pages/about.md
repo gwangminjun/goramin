@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "welcome goramin blog"
+title: "goramin blog"
 author_profile: true
 redirect_from: 
   - /about/
