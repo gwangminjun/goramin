@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Publications 1주일에 한번"
+title: "Publications 1 weeks"
 permalink: /publications/
 author_profile: true
 ---
