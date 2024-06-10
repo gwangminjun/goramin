@@ -12,7 +12,7 @@ title                    : "minJunYang / goraMin"
 title_separator          : "life come to be gora"
 name                     : &name "minJunYang"
 description              : &description "personal description"
-url                      : https://gwangminjun.github.io/goramin/ # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : https://gwangminjun.github.io/goramin # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "gwangminjun/goramin"
 
