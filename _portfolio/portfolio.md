@@ -1,6 +1,6 @@
 ---
 title: "Portfolio"
-excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
+excerpt: "포트폴리오 입니다."
 collection: portfolio
 ---
 
