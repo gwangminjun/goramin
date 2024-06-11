@@ -1,7 +1,9 @@
 ---
 title: "mysql 외부 연결 안될시 해결"
 collection: teaching
+type: "infra"
 permalink: /teaching/mysqlOpen/content
+venue: "직장"
 date: 2024-06-11
 ---
 
