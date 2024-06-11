@@ -28,7 +28,7 @@ tech
 * Deployment : Git , Git-Hub
 * Libraries and Tools: Maven , OpenLayers , GeoServer , Tiles , MyBatis , Three.js  , Cesium.js
 * Development Env : Intellij IDEA , Notepad++ , VS Code
-* Note-taking : Notion , Markdown , Git-Hub
+* Note-taking : Notion , Markdown 
 
 Publications
 ======
