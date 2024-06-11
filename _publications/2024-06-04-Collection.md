@@ -8,4 +8,4 @@ venue: 'Journal 2'
 slidesurl: 'https://gwangminjun.github.io/goramin/files/collection.pdf'
 citation: 'min jun Yang. (2024). &quot; Collection &quot; <i>Journal 2</i>. 1(1).'
 ---
-git에 대해 알아보자
+Collection에 대해 알아보자
