@@ -12,15 +12,28 @@ redirect_from:
 experience
 ======
 * DATA-HUB
-  * API 데이터 수집 및 관리 시스템
-  * 주요기능
-    * 다양한 API 소스 통합
-    * 데이터 표준화 및 변환
-    * 데이터 관리 및 모니터링 시스템
-  * 성과
-    * 다양한 API 소스에서 데이터를 실시간으로 수집하여 데이터 가시성을 향상
-    * 데이터 품질 개선 및 중복 데이터 제거로 인해 데이터 분석의 정확성 향상
-  
+  * 기술 스택: Java, Spring Boot, Spring Batch, Quartz, PostgreSQL
+  * 주요 기능:
+    * API 데이터 수집 및 관리
+    * 다양한 API 소스 통합 및 데이터 표준화
+* 스마트 군정 시스템
+  * 기술 스택: Java, Spring Legacy, PostgreSQL, OpenLayers, GeoServer
+  * 주요 기능:
+    * 군정 관련 빅데이터 수집 및 분류
+    * 수집된 빅데이터 시각화
+    * 대량의 시설 및 기타 데이터 엑셀 일괄 등록
+    * 등록된 시설을 지도에 시각화
+* 농촌 개발 시설물 시스템
+  * 기술 스택: Java, Spring Legacy, PostgreSQL, OpenLayers, GeoServer, Cesium.js
+  * 주요 기능:
+    * 3D 시설물 파일 등록 및 3D 지도 표출
+    * 시설물 유지보수 사업 관리
+* 근무 관리 시스템
+  * 기술 스택: Java, Spring Legacy, PostgreSQL
+  * 주요 기능:
+    * 민원 및 재난 상황 관리 및 통계 시각화
+    * 대량의 민원 및 재난 데이터 엑셀 일괄 등록
+
 tech
 ======
 * Front-end : CSS, HTML , Javascript, JQuery
