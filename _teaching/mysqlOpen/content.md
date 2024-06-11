@@ -6,8 +6,6 @@ permalink: /teaching/mysqlOpen/content
 venue: "직장"
 date: 2024-06-11
 ---
-
-# mysql 외부 연결 안될시
 회사에서 연계 db로 mysql를 받앗는데 개발서버와 로컬 pc로 연결이 안됨
 
 ## MySQL에서 모든 IP에서의 접속을 허용
