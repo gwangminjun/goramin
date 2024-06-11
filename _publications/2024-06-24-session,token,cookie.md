@@ -1,5 +1,5 @@
 ---
-title: "JPA"
+title: "session,token,cookie"
 collection: publications
 permalink: /publication/2024-06-24-session,token,cookie
 excerpt: 'session,token,cookie 에 대해서 알아보자'
