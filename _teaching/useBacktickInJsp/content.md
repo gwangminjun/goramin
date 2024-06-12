@@ -6,6 +6,7 @@ permalink: /teaching/useBacktickInJsp/content
 venue: "직장"
 date: 2024-06-12
 ---
+
 ## JSP 안에서의 백틱(``) 사용
 
 ### 백틱(``)

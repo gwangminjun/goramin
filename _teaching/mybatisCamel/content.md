@@ -17,19 +17,23 @@ MyBatis는 SQL 결과 집합의 컬럼 이름을 CamelCase 형식의 Java 속성
 
 ### mybatis.mapUnderscoreToCamelCase
 ![img.png](img.png)
-해당 동작은 MyBatis의 mapUnderscoreToCamelCase 설정 옵션에 의해 제어되며 해당 옵션이 활성화 되있는 경우 자동으로 <br>
-언더스코어(_) -> CamelCase 형식으로 변환한다.
+
+해당 동작은 MyBatis의 mapUnderscoreToCamelCase 설정 옵션에 의해 제어되며 해당 옵션이 활성화 되있는 경우<br> 
+자동으로 언더스코어(_) -> CamelCase 형식으로 변환한다.
 
 ### 언더스코어(_) 유지하고 싶을시
 언더스코어(_) 유지하여 사용하고 싶다면
 1. MyBatis 설정 변경
-```xml
+
+```text
 <settings>
   <setting name="mapUnderscoreToCamelCase" value="false"/>
 </settings>
 ```
 - mapUnderscoreToCamelCase를 비활성화하여 SQL 결과 집합의 컬럼 이름을 Java 속성 이름과 동일하게 매핑
+
 2. Alias 사용
+
 ```text
 SELECT user_id AS userId, user_name AS userName FROM users;
 ```
