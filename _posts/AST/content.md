@@ -1,7 +1,7 @@
 ---
 title: 'AST 에 대하여'
 date: 2024-06-12
-permalink: /posts/AST/content
+permalink: _posts/AST/content
 tags:
   - javascript
   - compiler
