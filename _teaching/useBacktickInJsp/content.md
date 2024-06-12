@@ -6,8 +6,7 @@ permalink: /teaching/useBacktickInJsp/content
 venue: "직장"
 date: 2024-06-12
 ---
-
-## JSP 안에서의 백틱(``) 사용
+JSP 안에서의 백틱(``) 사용
 
 ### 백틱(``)
 JavaScript에서 백틱(``)을 사용하면 템플릿 리터럴(template literal)을 작성할 수 있다. <br> 
