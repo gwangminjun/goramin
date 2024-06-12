@@ -1,7 +1,7 @@
 ---
 title: "mybatis Type Exception 에러"
 collection: teaching
-type: "infra"
+type: "mybatis"
 permalink: /teaching/mybatisTypeException/content
 venue: "직장"
 date: 2024-06-12
