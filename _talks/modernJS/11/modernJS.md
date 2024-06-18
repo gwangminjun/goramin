@@ -1,5 +1,5 @@
 ---
-title: "[모던 자바 스크립트] 10장 원시 값과 객체의 비교"
+title: "[모던 자바 스크립트] 11장 원시 값과 객체의 비교"
 collection: talks
 type: "Talk"
 permalink: _talks/modernJS/11/modernJS
