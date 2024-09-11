@@ -61,34 +61,34 @@ Generics 에 대해서
 ### 제네릭 활용법
 1. 타입 매개변수 제한하기
    - extends 키워드를 사용하여 매개변수를 클래스나 인터페이스로 제한
-   ```java
-   public class Box<T extends Number> {
-      private T value;
-   
-      public void setValue(T value) {
-          this.value = value;
-      }
-   
-      public T getValue() {
-          return value;
-      }
-   }
-   
-   //정상
-   // Box<Integer> intBox = new Box<>();
-   // intBox.setValue(10);
-   // Integer value = intBox.getValue();
-   //
-   // Box<Double> doubleBox = new Box<>();
-   // doubleBox.setValue(3.14);
-   // Double value = doubleBox.getValue();
-   
-   //컴파일 에러
-   //Box<Integer>, Box<Double> 등으로 사용할 수 있지만, Box<String>은 컴파일 에러가 발생합니다. 
-   //왜냐하면 String은 Number의 하위 클래스가 아니기 때문입니다.
-   // Box<String> stringBox = new Box<>();
+   - 
+```java
+public class Box<T extends Number> {
+   private T value;
 
-   ```
+   public void setValue(T value) {
+       this.value = value;
+   }
+
+   public T getValue() {
+       return value;
+   }
+}
+
+//정상
+// Box<Integer> intBox = new Box<>();
+// intBox.setValue(10);
+// Integer value = intBox.getValue();
+//
+// Box<Double> doubleBox = new Box<>();
+// doubleBox.setValue(3.14);
+// Double value = doubleBox.getValue();
+
+//컴파일 에러
+//Box<Integer>, Box<Double> 등으로 사용할 수 있지만, Box<String>은 컴파일 에러가 발생합니다. 
+//왜냐하면 String은 Number의 하위 클래스가 아니기 때문입니다.
+// Box<String> stringBox = new Box<>();
+```
 2. 와일드 카드 표현
    - 제네릭 타입에서 ?를 사용하여 와일드카드를 표현할 수 있습니다.
    - "<? extends T>": T의 하위 클래스만 허용 (상한 경계)
@@ -172,6 +172,7 @@ Generics 에 대해서
    
 7. 제네릭 타입의 상속
    - 제네릭 클래스나 인터페이스를 상속할 때, 타입 매개변수를 지정해야 합니다.
+   - 
 ```java
 public class Box<T> {
     protected T value;
@@ -204,6 +205,7 @@ public class Box<T> {
 5. N (Number): 숫자(Number) 타입을 나타낼 때 주로 사용됩니다.
 
 ### 제네릭 vs DTO
+
 |   비교    | 제네릭                                                       | DTO                                                         |
 |:-------:|:----------------------------------------------------------|:------------------------------------------------------------|
 |  타입검사   | 컴파일 시점                                                    | 런타임 시점                                                      |
@@ -216,6 +218,7 @@ public class Box<T> {
 |   성능    | - 제네릭 타입 삭제로 인한 런타임 오버헤드 없음<br>- 컴파일 타임에 타입 검사 수행으로 성능 향상 | - 객체 생성과 복사로 인한 성능 오버헤드 발생 가능<br>- 런타임에 타입 검사 수행으로 성능 저하 가능 |
 
 #### 성능 오버헤드 관련
+
 |   비교    | 제네릭                                                               | DTO                                                                                         |
 |:-------:|:------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
 |  객체생성   | - 타입 매개변수를 사용하여 객체 생성 시점에 타입을 지정합니다. <br> - 추가적인 오버헤드가 발생하지 않습니다. | - 계층 간 데이터 전송을 위해 새로운 객체를 생성해야 합니다. <br>- 빈번한 객체 생성은 성능 오버헤드를 유발할 수 있습니다. <br>              |
@@ -224,7 +227,8 @@ public class Box<T> {
 |   런타임   | - 컴파일 타임에 타입 검사를 수행하고 런타임에는 타입 정보가 제거되므로, 런타임 오버헤드가 발생하지 않습니다.    | - 런타임에 객체로 존재하므로 메모리 사용량이 증가할 수 있습니다. <br> - DTO 객체의 생성과 가비지 컬렉션으로 인한 런타임 오버헤드가 발생할 수 있습니다. |
 
 ### object vs T
-   - object 로 선언시와 타입 선언시 의 차이 
+   - object 로 선언시와 타입 선언시 의 차이
+   -
    ```java
    public class objectDataDTO {
        private Object data;
