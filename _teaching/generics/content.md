@@ -172,7 +172,6 @@ public class Box<T extends Number> {
    
 7. 제네릭 타입의 상속
    - 제네릭 클래스나 인터페이스를 상속할 때, 타입 매개변수를 지정해야 합니다.
-   - 
 ```java
 public class Box<T> {
     protected T value;
