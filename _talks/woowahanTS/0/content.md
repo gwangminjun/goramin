@@ -3,7 +3,7 @@ title: "[우아한 타입스크립트 with 리액트] 0장 시작"
 collection: talks
 type: "Talk"
 permalink: _talks/woowahanTS/0/content
-date: 2024-03-02
+date: 2024-09-11
 ---
 
 # 0장 시작
