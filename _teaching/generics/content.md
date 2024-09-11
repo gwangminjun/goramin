@@ -9,54 +9,54 @@ date: 2024-09-10
 Generics 에 대해서
 
 ## 서론
-현재 회사코드에서는 DTO 구조로 구성되어있어 제네릭은 사용하지 않는데 <br>
-typeScript 스터디를 진행하면서 타입추론에 관심을 가지게 되고 <br>
-제네릭에 대해서 관심이 생겨 정리하게 되었다
+   현재 회사코드에서는 DTO 구조로 구성되어있어 제네릭은 사용하지 않는데 <br>
+   typeScript 스터디를 진행하면서 타입추론에 관심을 가지게 되고 <br>
+   제네릭에 대해서 관심이 생겨 정리하게 되었다
 
 ### java 제네릭
-자바의 제네릭(Generics)은 Java 5부터 도입된 기능으로, <br>
-클래스나 메서드에서 사용할 타입을 파라미터로 받아서 유연하고 재사용성 높은 코드를 작성할 수 있도록 해줍니다. <br> 
-제네릭을 사용하면 컴파일 시점에 타입을 체크하므로 런타임 에러를 방지할 수 있습니다. <br>
+   자바의 제네릭(Generics)은 Java 5부터 도입된 기능으로, <br>
+   클래스나 메서드에서 사용할 타입을 파라미터로 받아서 유연하고 재사용성 높은 코드를 작성할 수 있도록 해줍니다. <br> 
+   제네릭을 사용하면 컴파일 시점에 타입을 체크하므로 런타임 에러를 방지할 수 있습니다. <br>
 
 #### 제네릭 클래스 정의 , 사용
-```java
-public class Box<T> {
-    private T item;
-
-    public void setItem(T item) {
-        this.item = item;
-    }
-
-    public T getItem() {
-        return item;
-    }
-}
-
-Box<String> stringBox = new Box<>();
-stringBox.setItem("Hello, Generics!");
-String item = stringBox.getItem();
-
-Box<Integer> integerBox = new Box<>();
-integerBox.setItem(42);
-int number = integerBox.getItem();
-```
+   ```java
+   public class Box<T> {
+       private T item;
+   
+       public void setItem(T item) {
+           this.item = item;
+       }
+   
+       public T getItem() {
+           return item;
+       }
+   }
+   
+   // Box<String> stringBox = new Box<>();
+   // stringBox.setItem("Hello, Generics!");
+   // String item = stringBox.getItem();
+   //
+   // Box<Integer> integerBox = new Box<>();
+   // integerBox.setItem(42);
+   // int number = integerBox.getItem();
+   ```
 #### 제네릭 메서드 정의 , 사용
-```java
-public static <T> void printArray(T[] array) {
-	for (T element : array) {
-		System.out.print(element + " ");
-	}
-	System.out.println();
-}
-
-Integer[] intArray = {1, 2, 3, 4, 5};
-Double[] doubleArray = {1.1, 2.2, 3.3, 4.4, 5.5};
-String[] stringArray = {"A", "B", "C", "D", "E"};
-
-printArray(intArray);    // 1 2 3 4 5
-printArray(doubleArray); // 1.1 2.2 3.3 4.4 5.5
-printArray(stringArray); // A B C D E
-```
+   ```java
+   public static <T> void printArray(T[] array) {
+       for (T element : array) {
+           System.out.print(element + " ");
+       }
+       System.out.println();
+   }
+   
+   // Integer[] intArray = {1, 2, 3, 4, 5};
+   // Double[] doubleArray = {1.1, 2.2, 3.3, 4.4, 5.5};
+   // String[] stringArray = {"A", "B", "C", "D", "E"};
+   //
+   // printArray(intArray);    // 1 2 3 4 5
+   // printArray(doubleArray); // 1.1 2.2 3.3 4.4 5.5
+   // printArray(stringArray); // A B C D E
+   ```
 
 ### 제네릭 활용법
 1. 타입 매개변수 제한하기
@@ -74,17 +74,20 @@ printArray(stringArray); // A B C D E
       }
    }
    
-   Box<Integer> intBox = new Box<>();
-   intBox.setValue(10);
-   Integer value = intBox.getValue();
+   //정상
+   // Box<Integer> intBox = new Box<>();
+   // intBox.setValue(10);
+   // Integer value = intBox.getValue();
+   //
+   // Box<Double> doubleBox = new Box<>();
+   // doubleBox.setValue(3.14);
+   // Double value = doubleBox.getValue();
    
-   Box<Double> doubleBox = new Box<>();
-   doubleBox.setValue(3.14);
-   Double value = doubleBox.getValue();
-   
-   Box<String> stringBox = new Box<>();
+   //컴파일 에러
    //Box<Integer>, Box<Double> 등으로 사용할 수 있지만, Box<String>은 컴파일 에러가 발생합니다. 
    //왜냐하면 String은 Number의 하위 클래스가 아니기 때문입니다.
+   // Box<String> stringBox = new Box<>();
+
    ```
 2. 와일드 카드 표현
    - 제네릭 타입에서 ?를 사용하여 와일드카드를 표현할 수 있습니다.
@@ -93,7 +96,7 @@ printArray(stringArray); // A B C D E
    - "<?>": 모든 타입 허용
    ```java
    public static void printList(List<? extends Number> list) {
-      for (Number item : list) {
+      for (Number item : list) {  \
           System.out.println(item);
           }
    }
@@ -104,28 +107,32 @@ printArray(stringArray); // A B C D E
    - 제네릭으로 정의된 인터페이스
    ```java
    public interface Pair<K, V> {
-       K getKey();
-       V getValue();
+     K getKey();
+     V getValue();
    }
-   
-   public class OrderedPair<K, V> implements Pair<K, V> {
-       private K key;
-       private V value;
-   
-       public OrderedPair(K key, V value) {
-           this.key = key;
-           this.value = value;
-       }
-   
-       public K getKey() {
-           return key;
-       }
-   
-       public V getValue() {
-           return value;
-       }
-   }
+   // pair 인터페이스를 구현하는 OrderPari 클래스
+   // public class OrderedPair<K, V> implements Pair<K, V> {
+   //  private K key;
+   //  private V value;
+   //
+   //  public OrderedPair(K key, V value) {
+   //      this.key = key;
+   //      this.value = value;
+   //  }
+   //
+   //  public K getKey() {
+   //      return key;
+   //  }
+   //
+   //  public V getValue() {
+   //      return value;
+   //  }
+   // }   
    ```
+   
+   
+   
+   
 4. 다중 타입 매개변수
    - 클래스나 메서드에서 여러 개의 타입 매개변수를 사용
    ```java
@@ -163,6 +170,7 @@ printArray(stringArray); // A B C D E
 6. 제네릭 타입 삭제
    - 자바의 제네릭은 컴파일 시점에만 타입 체크를 수행하고, 런타임에는 제네릭 타입 정보가 삭제된다.
    - 이를 타입 삭제라고 하며, 이로 인해 제네릭 타입의 인스턴스를 만들거나 instanceof 연산자를 사용할 수 없습니다.
+   
 7. 제네릭 타입의 상속
    - 제네릭 클래스나 인터페이스를 상속할 때, 타입 매개변수를 지정해야 합니다.
    ```java
@@ -178,22 +186,23 @@ printArray(stringArray); // A B C D E
        }
    }
    
-   public class IntegerBox extends Box<Integer> {
-       public void increment() {
-           value++;
-       }
-   }
+   // box 클래스를 상속받는 IntegerBox 클래스
+   // public class IntegerBox extends Box<Integer> {
+   //     public void increment() {
+   //         value++;
+   //     }
+   // }
    ```
 
 ### 일반적인 타입 매개변수 선언
 1. T (Type): 일반적인 타입을 나타낼 때 주로 사용됩니다. 
-   - 예를 들어, List<T>에서 T는 리스트에 저장될 요소의 타입을 나타냅니다.
+   - List<T>에서 T는 리스트에 저장될 요소의 타입을 나타냅니다.
 2. K (Key): 키-값 쌍(Key-Value pair)에서 키(Key)의 타입을 나타낼 때 주로 사용됩니다. 
-   - 예를 들어, Map<K, V>에서 K는 맵의 키 타입을 나타냅니다. 
+   - Map<K, V>에서 K는 맵의 키 타입을 나타냅니다. 
 3. V (Value): 키-값 쌍에서 값(Value)의 타입을 나타낼 때 주로 사용됩니다. 
-   - 예를 들어, Map<K, V>에서 V는 맵의 값 타입을 나타냅니다. 
+   - Map<K, V>에서 V는 맵의 값 타입을 나타냅니다. 
 4. E (Element): 컬렉션(Collection)에서 요소(Element)의 타입을 나타낼 때 주로 사용됩니다. 
-   - 예를 들어, List<E>에서 E는 리스트의 요소 타입을 나타냅니다. 
+   - List<E>에서 E는 리스트의 요소 타입을 나타냅니다. 
 5. N (Number): 숫자(Number) 타입을 나타낼 때 주로 사용됩니다.
 
 ### 제네릭 vs DTO
