@@ -154,7 +154,6 @@ Generics 에 대해서
        }
    }
    ```
-   
 5. 제네릭 메서드와 타입 추론
    - 메서드 선언부에 타입 매개변수를 사용하여 제네릭 메서드를 정의
    - Java 7부터는 타입 추론을 지원하여, 메서드 호출 시 타입 매개변수를 명시하지 않아도 된다.
@@ -173,26 +172,25 @@ Generics 에 대해서
    
 7. 제네릭 타입의 상속
    - 제네릭 클래스나 인터페이스를 상속할 때, 타입 매개변수를 지정해야 합니다.
-   ```java
-   public class Box<T> {
-       protected T value;
-   
-       public void setValue(T value) {
-           this.value = value;
-       }
-   
-       public T getValue() {
-           return value;
-       }
-   }
-   
-   // box 클래스를 상속받는 IntegerBox 클래스
-   // public class IntegerBox extends Box<Integer> {
-   //     public void increment() {
-   //         value++;
-   //     }
-   // }
-   ```
+```java
+public class Box<T> {
+    protected T value;
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public T getValue() {
+        return value;
+    }
+}
+// box 클래스를 상속받는 IntegerBox 클래스
+// public class IntegerBox extends Box<Integer> {
+//     public void increment() {
+//         value++;
+//     }
+// }
+```
 
 ### 일반적인 타입 매개변수 선언
 1. T (Type): 일반적인 타입을 나타낼 때 주로 사용됩니다. 
