@@ -47,21 +47,22 @@ date: 2025-04-01
   - 느낀점 : mybatis 설정은 프로젝트의 성능에 영향을 미치므로 신중하게 설정해야함
   
   - sqlsessionbean 설정
-  ```xml
-  <!-- 기존 -->
-  <bean id="sqlSessionFactory" class="com.daehoeng.cloud.common.mybatis.RefreshableSqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="configLocation" value="classpath:mybatis-config.xml" />
-        <property name="mapperLocations" value="classpath:/**/maps/**/*.xml" />
-        <property name="interval" value="1000" />
-  </bean>
   
-   <!-- 신규 -->
-  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="configLocation"  value="classpath:/geomex/xeus/setting/mybatis/config.xml" />
-        <property name="mapperLocations" value="classpath:/geomex/xeus/setting/mappers/*.xml" />
-  </bean>
+  ```xml
+    <!-- 기존 -->
+    <bean id="sqlSessionFactory" class="com.daehoeng.cloud.common.mybatis.RefreshableSqlSessionFactoryBean">
+          <property name="dataSource" ref="dataSource" />
+          <property name="configLocation" value="classpath:mybatis-config.xml" />
+          <property name="mapperLocations" value="classpath:/**/maps/**/*.xml" />
+          <property name="interval" value="1000" />
+    </bean>
+    
+     <!-- 신규 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+          <property name="dataSource" ref="dataSource" />
+          <property name="configLocation"  value="classpath:/geomex/xeus/setting/mybatis/config.xml" />
+          <property name="mapperLocations" value="classpath:/geomex/xeus/setting/mappers/*.xml" />
+    </bean>
   ```
   - 느낀점 : RefreshableSqlSessionFactoryBean은 표준 SqlSessionFactoryBean을 확장한 것으로, 주로 개발 시 편의성을 위해 매퍼 파일의 동적 리로드 기능을 제공
   - 기존 프로젝트에서는 mapper 파일을 수정하면 서버를 재시작하지 않아도 즉시 반영되는 장점이 있었음
@@ -69,56 +70,56 @@ date: 2025-04-01
   
   - mybatis 설정
   ```xml
-  <!-- 기존 -->
-  <!-- mybatis-config.xml -->
-  <configuration>
-    <settings>
-       <!-- NULL 값을 데이터베이스에 전달할 때 JDBC NULL 타입으로 처리 -->
-       <setting name="jdbcTypeForNull" value="NULL" />
-       
-       <!-- MyBatis 캐시 기능 활성화 - SQL 쿼리 결과를 캐싱하여 성능 향상 -->
-       <setting name="cacheEnabled" value="true" />
-       
-       <!-- 지연 로딩(Lazy Loading) 비활성화 - 연관 객체들을 즉시 로딩 -->
-       <setting name="lazyLoadingEnabled" value="false" />
-       
-       <!-- 단일 쿼리로 여러 결과셋 반환 허용 -->
-       <setting name="multipleResultSetsEnabled" value="true" />
-       
-       <!-- 결과셋에서 컬럼 이름 대신 컬럼 라벨 사용 -->
-       <setting name="useColumnLabel" value="true" />
-       
-       <!-- 자동 생성 키(auto-generated keys) 기능 비활성화 -->
-       <setting name="useGeneratedKeys" value="false" />
-       
-       <!-- SQL 실행기 타입을 REUSE로 설정 - PreparedStatement 재사용으로 성능 최적화 -->
-       <setting name="defaultExecutorType" value="REUSE" />
-       
-       <!-- 데이터베이스 컬럼의 언더스코어 명명법을 Java 객체의 카멜케이스로 자동 변환 (예: user_name → userName) -->
-       <setting name="mapUnderscoreToCamelCase" value="true" />
-    </settings>
-
-    <mappers>
-       <!-- 페이징 처리 관련 공통 SQL 매퍼 파일 등록 -->
-       <mapper resource="mybatis/Page.xml" />
-    </mappers>  
-  </configuration>
-  <!-- 신규 -->
-  <!-- config.xml -->
-  <configuration>
-    <settings>
-        <!-- 데이터베이스 컬럼명의 언더스코어 표기법을 Java 객체의 카멜케이스 속성명으로 자동 변환
-             (예: user_name → userName, patrol_id → patrolId) -->
-        <setting name="mapUnderscoreToCamelCase" value="true"/>
-    </settings>
-    
-    <typeAliases>
-        <!-- PatrolVo 클래스에 대한 별칭 설정
-             전체 패키지 경로(geomex.xeus.equipmgr.service.PatrolVo) 대신 
-             'PatrolVo'라는 짧은 이름으로 매퍼 XML에서 사용 가능 -->
-        <typeAlias type="geomex.xeus.equipmgr.service.PatrolVo" alias="PatrolVo"/>
-    </typeAliases>
-  </configuration>
+    <!-- 기존 -->
+    <!-- mybatis-config.xml -->
+    <configuration>
+      <settings>
+         <!-- NULL 값을 데이터베이스에 전달할 때 JDBC NULL 타입으로 처리 -->
+         <setting name="jdbcTypeForNull" value="NULL" />
+         
+         <!-- MyBatis 캐시 기능 활성화 - SQL 쿼리 결과를 캐싱하여 성능 향상 -->
+         <setting name="cacheEnabled" value="true" />
+         
+         <!-- 지연 로딩(Lazy Loading) 비활성화 - 연관 객체들을 즉시 로딩 -->
+         <setting name="lazyLoadingEnabled" value="false" />
+         
+         <!-- 단일 쿼리로 여러 결과셋 반환 허용 -->
+         <setting name="multipleResultSetsEnabled" value="true" />
+         
+         <!-- 결과셋에서 컬럼 이름 대신 컬럼 라벨 사용 -->
+         <setting name="useColumnLabel" value="true" />
+         
+         <!-- 자동 생성 키(auto-generated keys) 기능 비활성화 -->
+         <setting name="useGeneratedKeys" value="false" />
+         
+         <!-- SQL 실행기 타입을 REUSE로 설정 - PreparedStatement 재사용으로 성능 최적화 -->
+         <setting name="defaultExecutorType" value="REUSE" />
+         
+         <!-- 데이터베이스 컬럼의 언더스코어 명명법을 Java 객체의 카멜케이스로 자동 변환 (예: user_name → userName) -->
+         <setting name="mapUnderscoreToCamelCase" value="true" />
+      </settings>
+  
+      <mappers>
+         <!-- 페이징 처리 관련 공통 SQL 매퍼 파일 등록 -->
+         <mapper resource="mybatis/Page.xml" />
+      </mappers>  
+    </configuration>
+    <!-- 신규 -->
+    <!-- config.xml -->
+    <configuration>
+      <settings>
+          <!-- 데이터베이스 컬럼명의 언더스코어 표기법을 Java 객체의 카멜케이스 속성명으로 자동 변환
+               (예: user_name → userName, patrol_id → patrolId) -->
+          <setting name="mapUnderscoreToCamelCase" value="true"/>
+      </settings>
+      
+      <typeAliases>
+          <!-- PatrolVo 클래스에 대한 별칭 설정
+               전체 패키지 경로(geomex.xeus.equipmgr.service.PatrolVo) 대신 
+               'PatrolVo'라는 짧은 이름으로 매퍼 XML에서 사용 가능 -->
+          <typeAlias type="geomex.xeus.equipmgr.service.PatrolVo" alias="PatrolVo"/>
+      </typeAliases>
+    </configuration>
   ```
   - 공통점 : mapUnderscoreToCamelCase 설정을 두 프로젝트 다 true로 설정하여 데이터베이스 컬럼명과 Java 객체 속성명 간의 매핑을 수동으로 작성할 필요가 없어짐
   - 차이점 : typeAliases 설정이 기존 프로젝트에서는 없었음
@@ -126,73 +127,73 @@ date: 2025-04-01
 
   - page.xml 설정
   ```xml
-  <!-- 기존 -->
-  <!-- page.xml 로 분리되어있음-->
-  <mapper namespace="Page">
-	<sql id="Top">
-		SELECT ROW_NUMBER() OVER(
-			<if test="sorts != null and !sorts.isEmpty and sorts.size() > 0">
-				ORDER BY
-				<foreach collection="sorts" item="item" index="index" open="" separator=", "  close="">
-					A.${item.column} ${item.type}
-				</foreach>
-			</if>
-			) AS RNUM, A.*
-				FROM (
-	</sql>
-
-	<sql id="Bottom">
-		) AS A
-		<if test="isPaging">
-			LIMIT #{length} OFFSET #{start}
-		</if>
-	</sql>
-
-	<sql id="Search">
-		<if test="searchType != null and searchType != '' and searchWrod != null and searchWrod != ''">
-			AND "${searchType}" LIKE CONCAT('%', #{searchWord}, '%')
-		</if>
-		<if test="searchDateColumn != null and searchDateColumn != '' and searchStartDate != null">
-			AND ${searchDateColumn} &gt;= TO_DATE(#{searchStartDate}, 'yyyy-MM-dd')
-		</if>
-		<if test="searchDateColumn != null and searchDateColumn != '' and searchEndDate != null">
-			AND ${searchDateColumn} &lt; TO_DATE(#{searchEndDate}, 'yyyy-MM-dd') + 1
-		</if>
-	</sql>
-  </mapper>
+    <!-- 기존 -->
+    <!-- page.xml 로 분리되어있음-->
+    <mapper namespace="Page">
+      <sql id="Top">
+          SELECT ROW_NUMBER() OVER(
+              <if test="sorts != null and !sorts.isEmpty and sorts.size() > 0">
+                  ORDER BY
+                  <foreach collection="sorts" item="item" index="index" open="" separator=", "  close="">
+                      A.${item.column} ${item.type}
+                  </foreach>
+              </if>
+              ) AS RNUM, A.*
+                  FROM (
+      </sql>
   
-  <!-- 신규 -->
-  <!-- 모든 xml 마다 작성해야함 -->
-  <where>
-      <if test="emdCd != null and emdCd != ''">
-          AND emd.emd_cd = #{emdCd}
-      </if>
-      <if test="name != null and name != ''">
-          AND xaa.name LIKE '%' || #{name} || '%'
-      </if>
-      <if test="searchInput != null and searchInput != ''">
-          AND xaa.name LIKE '%' || #{searchInput} || '%'
-      </if>
-      <if test="state != null and state != ''">
-          AND (
-          (#{state} = 'Y' AND xaa.status LIKE '%정상%') OR
-          (#{state} = 'N' AND xaa.status NOT LIKE '%정상%')
-          )
-      </if>
-  </where>
-
-  <trim prefix="ORDER BY">
-      <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
-          ${sortCol} ${sortTyp}
-      </if>
-      <if test="sortCol == null and sortTyp == null">
-          xaa.mgr_no asc
-      </if>
-  </trim>
-
-  <if test="limit != null and limit != '' and offset != null and offset != ''">
-      LIMIT ${limit} OFFSET ${offset}
-  </if>
+      <sql id="Bottom">
+          ) AS A
+          <if test="isPaging">
+              LIMIT #{length} OFFSET #{start}
+          </if>
+      </sql>
+  
+      <sql id="Search">
+          <if test="searchType != null and searchType != '' and searchWrod != null and searchWrod != ''">
+              AND "${searchType}" LIKE CONCAT('%', #{searchWord}, '%')
+          </if>
+          <if test="searchDateColumn != null and searchDateColumn != '' and searchStartDate != null">
+              AND ${searchDateColumn} &gt;= TO_DATE(#{searchStartDate}, 'yyyy-MM-dd')
+          </if>
+          <if test="searchDateColumn != null and searchDateColumn != '' and searchEndDate != null">
+              AND ${searchDateColumn} &lt; TO_DATE(#{searchEndDate}, 'yyyy-MM-dd') + 1
+          </if>
+      </sql>
+    </mapper>
+    
+    <!-- 신규 -->
+    <!-- 모든 xml 마다 작성해야함 -->
+    <where>
+        <if test="emdCd != null and emdCd != ''">
+            AND emd.emd_cd = #{emdCd}
+        </if>
+        <if test="name != null and name != ''">
+            AND xaa.name LIKE '%' || #{name} || '%'
+        </if>
+        <if test="searchInput != null and searchInput != ''">
+            AND xaa.name LIKE '%' || #{searchInput} || '%'
+        </if>
+        <if test="state != null and state != ''">
+            AND (
+            (#{state} = 'Y' AND xaa.status LIKE '%정상%') OR
+            (#{state} = 'N' AND xaa.status NOT LIKE '%정상%')
+            )
+        </if>
+    </where>
+  
+    <trim prefix="ORDER BY">
+        <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+            ${sortCol} ${sortTyp}
+        </if>
+        <if test="sortCol == null and sortTyp == null">
+            xaa.mgr_no asc
+        </if>
+    </trim>
+  
+    <if test="limit != null and limit != '' and offset != null and offset != ''">
+        LIMIT ${limit} OFFSET ${offset}
+    </if>
   ```
   - 공통점 : 페이징 처리 관련 공통 SQL 매퍼 파일을 등록하여 페이징 처리를 위한 SQL을 재사용
   - 차이점 : 기존 프로젝트에서는 Top, Bottom, Search SQL을 사용하고 있었음
@@ -202,31 +203,31 @@ date: 2025-04-01
 
   - mapper namespace 설정
   ```java
-  // 기존
-  // java
-  // getSqlSession().selectList(query(namespace.id), search);
-  // xml
-  // <mapper namespace="WkParking">
-  ```
-  장점:
-  - 단순함: 기존 방식은 매우 직관적이고 간단하여, XML 매핑 파일을 기반으로 SQL 쿼리와 매핑을 처리합니다.
-  - 효율적: getSqlSession().selectList() 같은 방식으로 필요한 쿼리를 쉽게 호출할 수 있습니다.
-  - 기존 코드와의 호환성: 기존 방식은 MyBatis의 전통적인 방식으로, 대규모 시스템에서 이미 널리 사용되고 있으므로 기존 코드와 호환성이 좋습니다.
-
-  단점:
-  - 타입 안정성 부족: SQL 쿼리와 매핑을 정의할 때, Java 코드에서 매핑된 결과 객체의 타입을 직접 지정하지 않으면 컴파일 타임에 오류를 확인하기 어려울 수 있습니다. 
-  - XML 관리: XML 파일에 SQL 쿼리가 직접 정의되기 때문에, SQL 쿼리 변경 시 XML 파일도 수정해야 하며, 이로 인해 XML 파일이 복잡해질 수 있습니다.
-  - 매퍼 메서드와 SQL 코드 분리: 쿼리와 매핑된 메서드들이 분리되어 있기 때문에 유지보수가 번거로울 수 있습니다. SQL 쿼리가 한 곳에 모여 있고 Java 코드에서 호출하는 구조입니다.
-  ```java
+    // 기존
+    // java
+    // getSqlSession().selectList(query(namespace.id), search);
+    // xml
+    // <mapper namespace="WkParking">
+    ```
+    장점:
+    - 단순함: 기존 방식은 매우 직관적이고 간단하여, XML 매핑 파일을 기반으로 SQL 쿼리와 매핑을 처리합니다.
+    - 효율적: getSqlSession().selectList() 같은 방식으로 필요한 쿼리를 쉽게 호출할 수 있습니다.
+    - 기존 코드와의 호환성: 기존 방식은 MyBatis의 전통적인 방식으로, 대규모 시스템에서 이미 널리 사용되고 있으므로 기존 코드와 호환성이 좋습니다.
   
-  // 신규
-  // java
-  // public interface AedMapper {
-  //  int getList(HashMap<String, String> map);
-  // }
-  // xml
-  //@Mapper("AedMapper")
-  //<mapper namespace="geomex.xeus.equipmgr.service.AedMapper">
+    단점:
+    - 타입 안정성 부족: SQL 쿼리와 매핑을 정의할 때, Java 코드에서 매핑된 결과 객체의 타입을 직접 지정하지 않으면 컴파일 타임에 오류를 확인하기 어려울 수 있습니다. 
+    - XML 관리: XML 파일에 SQL 쿼리가 직접 정의되기 때문에, SQL 쿼리 변경 시 XML 파일도 수정해야 하며, 이로 인해 XML 파일이 복잡해질 수 있습니다.
+    - 매퍼 메서드와 SQL 코드 분리: 쿼리와 매핑된 메서드들이 분리되어 있기 때문에 유지보수가 번거로울 수 있습니다. SQL 쿼리가 한 곳에 모여 있고 Java 코드에서 호출하는 구조입니다.
+  
+  ```java
+    // 신규
+    // java
+    // public interface AedMapper {
+    //  int getList(HashMap<String, String> map);
+    // }
+    // xml
+    //@Mapper("AedMapper")
+    //<mapper namespace="geomex.xeus.equipmgr.service.AedMapper">
   ``` 
   장점:
   - 타입 안전성: MyBatis 3.x 이후의 방식에서는 인터페이스와 매퍼 메서드가 보다 명확히 정의되므로, Java 코드에서 반환 타입을 컴파일 타임에 안전하게 확인할 수 있습니다.
