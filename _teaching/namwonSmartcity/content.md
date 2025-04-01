@@ -244,6 +244,124 @@ date: 2025-04-01
   - 신규 방식은 타입 안정성과 스프링 통합 등에서 더 유리하며, 유지보수와 코드 일관성 측면에서 장점이 있습니다. 하지만, MyBatis와 스프링 통합에 대한 이해도가 필요하고, 때로는 XML로 관리하는 복잡한 SQL 쿼리가 더 효율적일 수 있습니다.
 
 
+- 차이점3: 기존 프로젝트와 다른 form 데이터 파싱
+
+```js
+  //기존
+  jQuery.fn.serializeObject = function () {
+    let obj = null;
+    try {
+      if (this[0] != null && this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+        let arr = this.serializeArray();
+        if (arr) {
+          obj = {};
+          jQuery.each(arr, function () {
+            obj[this.name] = this.value;
+          });
+        }
+      }
+    } catch (e) {
+      alert(e.message);
+    } finally {
+    }
+  
+    return obj;
+  };  
+```
+기능:
+- 이 함수는 폼(form) 태그 내부의 모든 입력 필드의 데이터를 객체로 변환합니다.
+- 폼의 serializeArray() 메서드를 사용하여 폼 데이터를 배열로 가져온 후, 배열의 각 항목을 키-값 객체 형식으로 변환합니다.
+- name 속성을 키로, value 속성을 값으로 하여 객체에 할당합니다.
+- 폼에 포함된 필드만을 대상으로 데이터를 수집하고, 폼이 아닌 다른 요소는 무시됩니다.
+
+장점:
+- 간결한 코드: serializeArray()를 사용하여 데이터를 배열 형태로 수집한 후, 이를 간단하게 객체로 변환하는 방식으로 코드가 간결하고 직관적입니다.
+- 폼에 특화: 폼의 필드에만 의존하므로, 폼 데이터 수집에 매우 적합합니다.
+- 호환성: serializeObject는 jQuery의 표준 메서드와 잘 통합되며, 다양한 웹 브라우저에서 호환성이 좋습니다.
+
+단점:
+- 폼 외의 요소 처리 불가: 폼 외의 요소에서 데이터를 수집하려면 추가적인 코드가 필요합니다. 예를 들어, 특정 div나 span 같은 요소에서 데이터를 수집하는 경우에는 별도로 처리해야 합니다.
+- 입력 필드에 의존: name 속성을 가진 폼 요소들만 처리되기 때문에, 추가적인 사용자 정의 필드나 비표준 요소를 다루기 어려울 수 있습니다.
+
+```js
+  //신규
+  const collectSendData = function() {
+    var sendData = {};
+    var target = arguments[0];
+  
+    if($(target).length > 0){
+      $(target).find(".sendData").each(function(){
+        sendData[$(this).attr("id")] = $(this).val();
+      });
+    } else {
+      if(_common.utils.validObject(target, "string")){
+        $(target).find(".sendData").each(function(){
+          sendData[$(this).attr("id")] = $(this).val();
+        });
+      } else {
+        $(document).find(".sendData").each(function(){
+          sendData[$(this).attr("id")] = $(this).val();
+        });
+      }
+    }
+  
+    return sendData;
+  }
+```
+기능:
+- collectSendData는 class="sendData" 속성을 가진 모든 요소들의 값을 수집하여 객체로 변환합니다.
+- target 파라미터를 통해 특정 요소를 지정하고, 그 내부의 .sendData 클래스가 적용된 모든 입력값을 가져옵니다.
+- target이 지정되지 않으면, 전체 문서에서 .sendData 클래스가 있는 요소를 찾습니다.
+
+장점:
+- 유연성: target을 매개변수로 받아 특정 영역에서만 데이터를 수집할 수 있으므로, 폼에 제한되지 않고 다양한 HTML 요소에서 데이터를 수집할 수 있습니다.
+- 클래스 기반 선택: class="sendData"로 지정된 요소에서 데이터를 수집하므로, 폼 외의 다양한 UI 요소에서 데이터를 추출하는 데 유리합니다.
+- 문서 전체에서 데이터 수집: 특정 영역을 지정하지 않으면 전체 문서에서 데이터를 수집할 수 있습니다.
+
+단점:
+- 데이터 일관성 부족: id 속성을 기반으로 데이터를 객체에 저장하는데, 여러 개의 동일한 id를 가진 요소가 존재할 경우 덮어쓰기가 발생할 수 있습니다. id는 페이지 내에서 유일해야 하므로 class 기반으로 데이터 수집을 권장합니다.
+- 범용성: sendData 클래스가 필수로 지정되어야 하므로, 해당 클래스가 모든 필요한 필드에 적용되지 않으면 데이터 수집이 제대로 이루어지지 않을 수 있습니다.
+- 추가적인 유효성 검사 부족: serializeObject는 폼의 name 속성에 의존하여 자동으로 데이터를 수집하지만, collectSendData는 데이터 수집을 위한 특정 클래스에 의존하기 때문에 추가적인 클래스 적용이 필요합니다.
+
+- 결론
+- serializeObject: 폼 데이터를 수집할 때 매우 직관적이고 간단하게 사용할 수 있습니다. 폼이 주된 데이터를 다루는 경우에 유리합니다.
+- collectSendData: 폼 외에도 다양한 UI 요소에서 데이터를 수집하고 싶거나, 특정 클래스를 가진 요소들을 대상으로 데이터를 수집할 때 유용합니다.
+
+- 둘의 장점을 더한 새로운 함수 제시
+```js
+  jQuery.fn.collectFormData = function () {
+  let formData = {};
+  
+  try {
+    // 폼 태그일 경우
+    if (this[0] != null && this[0].tagName && this[0].tagName.toUpperCase() === "FORM") {
+      // 폼 데이터 배열로 직렬화하여 객체로 변환
+      let arr = this.serializeArray();
+      jQuery.each(arr, function () {
+        formData[this.name] = this.value;
+      });
+    }
+  
+    // .sendData 클래스가 있는 요소들에 대해 처리
+    this.find(".sendData").each(function () {
+      let id = $(this).attr("id");
+      if (id) {
+        formData[id] = $(this).val();
+      }
+    });
+  } catch (e) {
+    console.error("Error in collecting form data: " + e.message);
+  }
+  
+  return formData;
+  };
+```
+폼 요소 수집:
+- 폼 태그를 감지하고 serializeArray()를 사용해 폼 데이터를 배열로 변환한 후, name을 키로, value를 값으로 하는 객체로 반환합니다.
+sendData 클래스 요소 수집:
+- 추가적으로 .sendData 클래스가 적용된 모든 요소에 대해 id를 키로, val() 값을 값으로 하는 항목을 객체에 추가합니다.
+에러 처리:
+- 오류가 발생하면 콘솔에 에러 메시지를 출력합니다.
 ---
     
   
