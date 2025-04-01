@@ -199,6 +199,7 @@ date: 2025-04-01
   - 기존 프로젝트에서는 Top SQL에서 ROW_NUMBER() OVER() 함수를 사용하여 페이징 처리를 하고 있었음
   - 신규 프로젝트에서는 where, trim, if 태그를 사용하여 페이징 처리를 하고 있음
   - Top, Bottom, Search SQL을 사용하면 반복되는 태그를 간결하게 사용할 수 있음
+  
 ---
     
   
