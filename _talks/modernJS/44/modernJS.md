@@ -6,6 +6,10 @@ permalink: _talks/modernJS/44/modernJS
 date: 2024-06-30
 ---
 
+# 44장 REST API
+
+---
+
 ## REST
 Http 를 기반으로 클라이언트가 서버의 리소스에 접근하는 방식을 규정한 아키텍처
 

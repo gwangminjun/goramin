@@ -6,7 +6,9 @@ permalink: _talks/modernJS/33/modernJS
 date: 2024-05-26
 ---
 
-## 33장 7번째 데이터 타입 Symbol
+# 33장 7번째 데이터 타입 Symbol
+
+---
 
 ### 심벌
 심벌(Symbol)은 ES6에서 도입된 7번째 데이터 타입으로 변경 불가능한 원시 타입의 값

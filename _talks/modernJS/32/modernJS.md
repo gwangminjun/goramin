@@ -6,7 +6,9 @@ permalink: _talks/modernJS/32/modernJS
 date: 2024-05-26
 ---
 
-## 32장 string
+# 32장 string
+
+---
 ### **String 생성자 함수**
 
 ```

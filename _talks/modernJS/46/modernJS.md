@@ -6,6 +6,10 @@ permalink: _talks/modernJS/46/modernJS
 date: 2024-07-13
 ---
 
+# 46장 제너레이터 와 async / await
+
+---
+
 제너레이터는 코드 블록의 실행을 일시 중지했다가 필요한 시점에 재개할 수 있는 특수한 함수
 
 특징

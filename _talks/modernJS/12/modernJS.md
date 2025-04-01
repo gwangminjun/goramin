@@ -6,7 +6,9 @@ permalink: _talks/modernJS/12/modernJS
 date: 2024-03-17
 ---
 
-## 12. 함수
+# 12. 함수
+
+---
 
 ### 함수란?
 

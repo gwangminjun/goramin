@@ -6,8 +6,10 @@ permalink: _talks/modernJS/35/modernJS
 date: 2024-06-02
 ---
 
+# 35장 스프레드 문법
 
-# 스프레드 문법
+---
+
 <br> ES6에서 도입된 스프레드 문법(전개 문법) ...은 하나로 뭉쳐 있는 여러 값들의 집합을 펼쳐서(전개, 분산하여, spread) 개별적인 값들의 목록으로 만든다. 
 <br> 스프레드 문법을 사용할 수 있는 대상은 
 <br> Array, String, Map, Set, DOM 컬렉션(NodeList, HTMLCollection), arguments와 같이  

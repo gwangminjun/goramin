@@ -6,7 +6,10 @@ permalink: _talks/modernJS/38/modernJS
 date: 2024-06-09
 ---
 
-## 38장 브라우저 렌더링과정
+# 38장 브라우저 렌더링과정
+
+---
+
 ## 브라우저 렌더링과정
 1. html,css,javascript,image,font 등 렌더링에 필요한 리소스를 요청하고 서버로부터 응답을 받는다.
 2. 브라우저의 렌더링 엔젠은 서버로부터 응답된 HTML과 CSS를 파싱하여 **DOM 과 CSSOM** 을 생성하고 <br> 이를 결합하여 **랜더 트리**를 생성한다.

@@ -6,7 +6,9 @@ permalink: _talks/modernJS/29/modernJS
 date: 2024-05-19
 ---
 
-## 29장 Math
+# 29장 Math
+
+---
 
 수학적인 상수와 함수를 위한 프로퍼티와 메서드 제공
 

@@ -6,7 +6,10 @@ permalink: _talks/modernJS/34/modernJS
 date: 2024-06-02
 ---
 
-# 이터러블
+# 34장 이터러블
+
+---
+
 es6에 도입된 이터레이션 프로토콜은 순회가능한 데이터 컬렉션을 만들기위해 
 ECMAScript 사양에 정의하여 미리 약속한 규칙이다.
 

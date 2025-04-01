@@ -6,6 +6,10 @@ permalink: _talks/modernJS/47/modernJS
 date: 2024-07-20
 ---
 
+# 47장 에러처리
+
+---
+
 ### try...catch...finally 문
 1. 반환하는 값을 if 문이나 단축 평가 또는 옵셔널 체이닝 연산자를 통해 확인
 

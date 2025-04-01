@@ -6,7 +6,9 @@ permalink: _talks/modernJS/28/modernJS
 date: 2024-05-19
 ---
 
-## 28장 Number
+# 28장 Number
+
+---
 ### 선언
 
 인수를 전달하지 않고 호출하면 `[[NumberData]]` 내부 슬롯에 0을 할당한 Number 래퍼 객체를 생성.

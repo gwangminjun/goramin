@@ -6,7 +6,9 @@ permalink: _talks/modernJS/18/modernJS
 date: 2024-03-29
 ---
 
-## 18장 함수와 일급 객체
+# 18장 함수와 일급 객체
+
+---
 
 ### 일급객체
 

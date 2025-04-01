@@ -6,7 +6,7 @@ permalink: _talks/modernJS/11/modernJS
 date: 2024-03-10
 ---
 
-## 10. 객체 리터럴
+# 10. 객체 리터럴
 
 ---
 

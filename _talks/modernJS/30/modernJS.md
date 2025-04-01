@@ -6,7 +6,9 @@ permalink: _talks/modernJS/30/modernJS
 date: 2024-05-19
 ---
 
-## 30장 Date
+# 30장 Date
+
+---
 Date 는 날짜와 시간(연, 월, 일, 시, 분, 초, 밀리초)을 위한 메서드를 제공하는
 
 빌트인 객체이면서 생성자 함수이다.

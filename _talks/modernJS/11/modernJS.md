@@ -6,7 +6,9 @@ permalink: _talks/modernJS/11/modernJS
 date: 2024-03-10
 ---
 
-## 11. 원시값과 객체의 비교
+# 11. 원시값과 객체의 비교
+
+---
 
 1. 원시값
 

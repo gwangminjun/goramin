@@ -6,7 +6,9 @@ permalink: _talks/modernJS/14/modernJS
 date: 2024-03-24
 ---
 
-## 14 전역변수의 문제점
+# 14 전역변수의 문제점
+
+---
 
 ### 생명주기
 

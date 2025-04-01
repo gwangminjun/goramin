@@ -6,7 +6,9 @@ permalink: _talks/modernJS/37/modernJS
 date: 2024-06-09
 ---
 
-## 37장 set/map
+# 37장 set/map
+
+---
 
 # Set
 Set 객체는 중복되지 않는 유일한 값들의 집합

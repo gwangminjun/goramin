@@ -6,7 +6,9 @@ permalink: _talks/modernJS/13/modernJS
 date: 2024-03-24
 ---
 
-## 13장 스코프
+# 13장 스코프
+
+---
 
 ### 스코프란
 

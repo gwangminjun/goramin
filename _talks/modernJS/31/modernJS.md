@@ -6,7 +6,9 @@ permalink: _talks/modernJS/31/modernJS
 date: 2024-05-26
 ---
 
-## 31장 RegExp
+# 31장 RegExp
+
+---
 정규 표현식(Regular expression)은 일정한 패턴을 가진 문자열의 집합을 표현하기 위해 사용하는 형식 언어(formal language)
 
 정규 표현식은 문자열을 대상으로 **패턴 매칭 기능**을 제공
