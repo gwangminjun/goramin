@@ -22,7 +22,7 @@ date: 2025-08-04
 </details>
 <details>
   <summary>매우 자유로운 라이선스 (Apache와 유사)</summary>
-  <p>BSD</p>
+  <p>BSD</p> 
 </details>
 <details>
   <summary>상업적 사용 가능은 하나, 라이브러리 연결 방식에 따라 소스 공개 요구</summary>
@@ -31,4 +31,104 @@ date: 2025-08-04
 <details>
   <summary>상업적 사용 가능 / 소스코드 수정 및 배포 가능</summary>
   <p>LGPL (Lesser GPL)</p>
+</details>
+
+## 리눅스 부팅 전체 흐름 요약
+<details>
+  <summary>리눅스 부팅 전체 흐름 요약</summary>
+  <p>리눅스 부팅 과정은 크게 BIOS/UEFI, 부트로더, 커널 로딩, 초기화 프로세스, 사용자 공간으로 나뉩니다.</p>
+  <ul>
+    <li><strong>BIOS/UEFI:</strong> 하드웨어 초기화 및 부트 디바이스 선택</li>
+    <li><strong>부트로더:</strong> 커널 이미지와 초기 램 디스크를 메모리에 로드</li>
+    <li><strong>커널 로딩:</strong> 커널이 하드웨어를 인식하고 초기화</li>
+    <li><strong>초기화 프로세스:</strong> init 프로세스가 시작되어 시스템 서비스와 데몬을 실행</li>
+    <li><strong>사용자 공간:</strong> 로그인 프롬프트 또는 GUI 환경 제공</li>
+  </ul>
+    <p>이 과정은 시스템의 하드웨어와 소프트웨어가 상호작용하여 최종적으로 사용자에게 인터페이스를 제공하는 것을 목표로 합니다.</p>
+</details>
+<details>
+  <summary>운영체제 선택, 커널(vmlinuz) + initrd 로드</summary>
+  <p>부트로더 (GRUB)</p>
+</details>
+<details>
+  <summary>PID 1번 프로세스 실행</summary>
+  <p>init (또는 systemd)</p>
+</details>
+<details>
+  <summary>하드웨어 초기화 및 루트 파일시스템 마운트</summary>
+  <p>커널 (vmlinuz)</p>
+</details>
+
+## RUNLevels
+<details>
+  <summary>RUNLevel 0</summary>
+  <p>시스템 종료</p>
+</details>
+<details>
+  <summary>RUNLevel 1</summary>
+  <p>단일 사용자 모드 (시스템 유지보수)</p>
+</details>
+<details>
+  <summary>RUNLevel 2</summary>
+  <p>멀티 사용자 모드 (네트워크 서비스 없음)</p>
+</details>
+<details>
+  <summary>RUNLevel 3</summary>
+  <p>멀티 사용자 모드 (네트워크 서비스 포함)</p>
+</details>
+<details>
+  <summary>RUNLevel 4</summary>
+  <p>사용자 정의 모드 (일반적으로 사용되지 않음)</p>
+</details>
+<details>
+  <summary>RUNLevel 5</summary>
+  <p>멀티 사용자 모드 (GUI 포함)</p>
+</details>
+<details>
+  <summary>RUNLevel 6</summary>
+  <p>시스템 재부팅</p>
+</details>
+
+## systemd Target
+<details>
+  <summary>target: graphical.target</summary>
+  <p>GUI 환경을 제공하는 타겟</p>
+</details>
+<details>
+  <summary>target: multi-user.target</summary>
+  <p>멀티 사용자 모드 (네트워크 서비스 포함) 	CLI 환경 (네트워크 포함) </p>
+</details>
+<details>
+  <summary>target: rescue.target</summary>
+  <p>단일 사용자 모드 (시스템 유지보수)</p>
+</details>
+<details>
+  <summary>target: emergency.target</summary>
+  <p>긴급 모드 (최소한의 서비스만 실행)</p>
+</details>
+<details>
+  <summary>target: reboot.target</summary>
+  <p>시스템 재부팅을 위한 타겟</p>
+</details>
+<details>
+  <summary>target: poweroff.target</summary>
+  <p>시스템 종료를 위한 타겟</p>
+</details>
+<details>
+  <summary>target: default.target</summary>
+  <p>기본 타겟 (일반적으로 graphical.target 또는 multi-user.target)</p>
+</details>
+
+- 관련 명령어
+<details>
+    <summary>systemctl get-default</summary>
+    <p>현재 시스템의 기본 타겟을 확인합니다.</p>
+</details>
+<details>
+    <summary>sudo systemctl set-default multi-user.target</summary>
+    <p>시스템의 기본 타겟을 설정합니다.</p>
+</details>
+<details>
+    <summary>sudo systemctl isolate graphical.target</summary>
+    <p>즉시 해당 타겟으로 전환</p>
 </details>
