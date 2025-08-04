@@ -1,5 +1,5 @@
 ---
-title: "[우아한 타입스크립트 with 리액트] 0장 시작"
+title: "[리눅스마스터] 공부용 토글박스"
 collection: talks
 type: "Talk"
 permalink: _talks/LinuxMaster/togglebox/content
