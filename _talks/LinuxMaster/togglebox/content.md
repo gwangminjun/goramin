@@ -30,8 +30,29 @@ date: 2025-08-04
       <p>LGPL (Lesser GPL)</p>
     </details>
     <details>
-      <summary>상업적 사용 가능 / 소스코드 수정 및 배포 가능</summary>
-      <p>LGPL (Lesser GPL)</p>
+      <summary>공개된 코드로 만든 파생물도 꼭 공개해야 함</summary>
+      <p>GPL (GNU General Public License)</p>
+    </details>
+    <details>
+      <summary>상업적 사용 가능, 소스 공개 요구 없음</summary>
+      <p>MIT</p>
+    </details>
+
+- 카피레프트 기준
+    <details>
+      <summary>강한 카피레프트</summary>
+      <p>GPL</p>
+      <p>파생물도 반드시 오픈</p>
+    </details>
+    <details>
+      <summary>약한 카피레프트</summary>
+      <p>LGPL, MPL</p>
+      <p>수정한 부분만 공개</p>
+    </details>
+    <details>
+      <summary>비카피레프트</summary>
+      <p>MIT, BSD, Apache</p>
+      <p>수정한 부분 공개 안 해도 됨</p>
     </details>
 ---
 ## 리눅스 부팅 전체 흐름 요약
@@ -154,6 +175,7 @@ date: 2025-08-04
         <p>계정명:패스워드:UID:GID:설명:홈디렉토리:쉘</p>
     </details>
 
+---
 ## 그룹 관련 명령어
 - 그룹 관련 주요 파일
     <details>
@@ -164,6 +186,43 @@ date: 2025-08-04
           <summary>gpasswd</summary>
           <p>그룹 비밀번호 설정</p>
     </details>
+---
+## RAID
+- RAID는 여러 디스크를 하나의 논리적 디스크로 묶어 데이터 보호 및 성능 향상을 도모하는 기술입니다.
+    <details>
+        <summary>RAID 0</summary>
+        <p>스트라이핑 (성능 향상, 데이터 보호 없음)</p>
+        <p>최소 2개 디스크</p>
+        <p>안전성 없음</p>
+    </details>
+    <details>
+        <summary>RAID 1</summary>
+        <p>미러링 (데이터 보호, 성능 향상)</p>
+        <p>최소 2개 디스크</p>
+        <p>안전성 최고</p>
+    </details>
+    <details>
+        <summary>RAID 5</summary>
+        <p>패리티 분산 (데이터 보호, 성능 향상) , 스트라이핑 + 패러티</p>
+        <p>최소 3개 디스크</p>
+        <p>2개 디스크 고장 시 복구 불가</p>
+    </details>
+    <details>
+        <summary>RAID 6</summary>
+        <p>RAID 5 + 이중 패리티 (더 높은 데이터 보호)</p>
+        <p>최소 4개 디스크</p>
+        <p>2개 고장 복구</p>
+    </details>
+    <details>
+        <summary>RAID 10</summary>
+        <p>RAID 1과 RAID 0의 조합 (고성능 및 데이터 보호)</p>
+        <p>최소 4개 디스크</p>
+        <p>속도+안정성 모두 OK</p>
+    </details>
+  
+---
+
+## LVM (Logical Volume Manager)
 
 
 
