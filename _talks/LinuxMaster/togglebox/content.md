@@ -158,6 +158,7 @@ date: 2025-08-04
         <p>즉시 해당 타겟으로 전환</p>
     </details>
 ---
+
 ## 리눅스 사용자 및 계정 관리
 - 사용자 관련 주요 파일
     <details>
@@ -224,7 +225,237 @@ date: 2025-08-04
 
 ## LVM (Logical Volume Manager)
 
+- 구성요소
+    <details>
+        <summary>Physical Volume (PV)</summary>
+        <p>물리적 디스크 또는 파티션</p>
+    </details>
+    <details>
+        <summary>Physical Extent (PE)</summary>
+        <p>PV의 부분 물리적 디스크</p>
+    </details>
+    <details>
+        <summary>Volume Group (VG)</summary>
+        <p>여러 PV를 묶은 논리적 그룹</p>
+    </details>
+    <details>
+        <summary>Logical Volume (LV)</summary>
+        <p>VG에서 할당된 논리적 디스크</p>
+    </details>
+    
+---
+
+## 부트 매니저
+- 부트 매니저는 시스템 부팅 시 운영체제를 선택하고 로드하는 역할을 합니다.
+- 순서 : BIOS/UEFI → 부트 매니저 → 커널 로딩
+    <details>
+        <summary>GRUB (GRand Unified Bootloader)</summary>
+        <p>가장 널리 사용되는 부트로더로, 다양한 운영체제를 지원합니다.</p>
+    </details>
+    <details>
+        <summary>LILO (Linux Loader)</summary>
+        <p>과거에 사용되던 부트로더로, 현재는 GRUB이 대체하고 있습니다.</p>
+    </details>
+    <details>
+        <summary>systemd-boot</summary>
+        <p>systemd 기반의 부트로더로, UEFI 시스템에서 사용됩니다.</p>
+    </details>
 
 
+- GRUB (GRand Unified Bootloader) 구성파일
+    <details>
+        <summary>/etc/default/grub</summary>
+        <p>GRUB 설정 파일로, 부트 메뉴 옵션 등을 정의합니다.</p>
+        <p>사용자가 설정 수정하는 파일</p>
+    </details>
+    <details>
+        <summary>/boot/grub/grub.cfg</summary>
+        <p>GRUB의 실제 구성 파일로, 부트 메뉴 항목을 포함합니다.</p>
+    </details>
+    <details>
+        <summary>/etc/grub.d/</summary>
+        <p>grub.cfg를 만드는 스크립트들이 있는 디렉터리</p>
+    </details>
+
+## 리눅스 주요 디렉터리
+- 리눅스 주요 디렉터리
+    <details>
+        <summary>/etc</summary>
+        <p>시스템 설정 파일이 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/var</summary>
+        <p>가변 데이터 파일이 위치하는 디렉터리 (로그, 캐시 등)</p>
+    </details>
+    <details>
+        <summary>/usr</summary>
+        <p>사용자 프로그램과 라이브러리가 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/bin</summary>
+        <p>시스템 필수 실행 파일이 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/sbin</summary>
+        <p>시스템 관리용 실행 파일이 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/lib</summary>
+        <p>시스템 라이브러리가 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/home</summary>
+        <p>사용자 홈 디렉터리가 위치하는 디렉터리</p>
+    </details>  
+    <details>
+        <summary>/dev</summary>
+        <p>디바이스 파일이 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/proc</summary>
+        <p>프로세스 정보와 시스템 정보를 제공하는 가상 파일 시스템</p>
+    </details>
+    <details>
+        <summary>/sys</summary>
+        <p>커널과 시스템 정보를 제공하는 가상 파일 시스템</p>
+    </details>
+    <details>
+        <summary>/tmp</summary>
+        <p>임시 파일이 위치하는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/boot</summary>
+        <p>부팅 관련 파일이 위치하는 디렉터리 (커널 이미지 등)</p>
+    </details>
+    <details>
+        <summary>/mnt</summary>
+        <p>임시 마운트 지점으로 사용되는 디렉터리</p>
+    </details>
+    <details>
+        <summary>/opt</summary>
+        <p>추가 소프트웨어 패키지가 위치하는 디렉터리</p>
+    </details>
+
+---
+## 파일시스템
+- 파일시스템은 디렉터리와 파일의 맵을 만드는 시스템이다.
+- 리눅스에서 사용되는 주요 파일시스템
+    <details>
+        <summary>ext4</summary>
+        <p>리눅스에서 가장 널리 사용되는 파일시스템</p>
+    </details>
+    <details>
+        <summary>XFS</summary>
+        <p>고성능 파일시스템으로 대용량 데이터 처리에 적합</p>
+        <p>RedHat 계열에서 기본 사용</p>
+    </details>
+    <details>
+        <summary>Btrfs</summary>
+        <p>스냅샷, RAID 기능 등을 지원하는 최신 파일시스템</p>
+    </details>
+    <details>
+        <summary>FAT32</summary>
+        <p>호환성이 높은 파일시스템으로 USB 드라이브 등에 사용</p>
+    </details>
+    <details>
+        <summary>NTFS</summary>
+        <p>Windows에서 주로 사용되는 파일시스템, 리눅스에서도 읽기/쓰기 가능</p>
+    </details>
+    <details>
+      <summary>저널링 파일 시스템</summary>
+      <p>저널링 파일 시스템은 데이터 무결성을 보장하기 위해 변경 사항을 기록하는 기능을 갖춘 파일 시스템입니다.</p>
+    </details>
+
+---
+## 블록그룹
+- 블록 그룹은 ext4 파일 시스템에서 데이터를 효율적으로 저장하고 관리하기 위한 구조입니다.
+    <details>
+        <summary>블록 그룹 구조</summary>
+        <p>블록 그룹은 파일 시스템을 여러 개의 블록 그룹으로 나누어 각 그룹이 독립적으로 관리됩니다.</p>
+        <p>각 블록 그룹은 다음과 같은 요소로 구성됩니다:</p>
+        <ul>
+            <li>슈퍼블록 (Superblock)</li>
+            <li>비트맵 (Bitmap)</li>
+            <li>데이터 블록 (Data Blocks)</li>
+            <li>인덱스 노드 (Inode Table)</li>
+        </ul>
+    </details>
+
+- 구성요소
+    <details>
+        <summary>슈퍼블록(Superblock) 복사본</summary>
+        <p>파일 시스템의 메타데이터를 포함하며, 파일 시스템의 크기, 블록 크기, 블록 그룹 수 등을 정의합니다.</p>
+    </details>
+    <details>
+        <summary>그룹 디스크립터</summary>
+        <p>파일 시스템의 관리를 위한 그룹 디스크립터</p>
+    </details>
+    <details>
+        <summary>비트맵(블록/아이노드) (Data Blocks)</summary>
+        <p>사용 가능한 블록/아이노드 추적</p>
+    </details>
+    <details>
+        <summary>아이노드 테이블 (inode table)</summary>
+        <p>파일 메타데이터 저장</p>
+    </details>
+    <details>
+        <summary>데이터 블록</summary>
+        <p>실제 파일 데이터 저장 영역</p>
+    </details>
+
+---
+## X 윈도우
+- X 윈도우 시스템은 리눅스에서 그래픽 사용자 인터페이스(GUI)를 제공하는 시스템입니다.
+
+- 구성요소
+    <details>
+        <summary>X 서버</summary>
+        <p>그래픽 하드웨어와 상호작용하여 화면에 그래픽을 출력합니다.</p>
+        <p>키보드, 마우스, 모니터 등 장치 제어 + 화면 출력</p>
+    </details>
+    <details>
+        <summary>X 클라이언트</summary>
+        <p>사용자 애플리케이션으로, X 서버에 그래픽 요청을 보냅니다.</p>
+        <p>	GUI 애플리케이션 (예: 터미널, 브라우저 등)</p>
+    </details>
+    <details>
+        <summary>X 윈도우 매니저</summary>
+        <p>윈도우의 모양과 동작을 관리하는 소프트웨어입니다.</p>
+        <p>창의 위치, 제목 표시줄 등 창 관리</p>
+    </details>
+
+- 환경 차이
+
+| 용어                    | 역할                                           | 예시                 |
+| --------------------- | -------------------------------------------- | ------------------ |
+| **🖥️ 데스크탑 환경 (DE)**  | 로그인 후 사용하는 **전체 GUI 환경** (바탕화면, 파일 관리자, 창 등) | GNOME, KDE, XFCE   |
+| **🔐 디스플레이 매니저 (DM)** | **로그인 화면(GUI)** 을 띄우고 데스크탑 환경을 불러오는 역할       | GDM, LightDM, SDDM |
 
 
+- 데스크탑 환경
+    <details>
+        <summary>GNOME</summary>
+        <p>사용자 친화적인 인터페이스를 제공하는 데스크탑 환경입니다.</p>
+    </details>
+    <details>
+        <summary>KDE Plasma</summary>
+        <p>고급 사용자 정의 기능을 제공하는 데스크탑 환경입니다.</p>
+    </details>
+    <details>
+        <summary>Xfce</summary>
+        <p>경량화된 데스크탑 환경으로, 저사양 시스템에서도 원활하게 동작합니다.</p>
+    </details>
+
+- 디스플레이 매니저
+    <details>
+        <summary>GDM (GNOME Display Manager)</summary>
+        <p>GNOME / 사용자 로그인 및 세션 관리를 담당하는 소프트웨어입니다.</p>
+    </details>
+    <details>
+        <summary>LightDM</summary>
+        <p>XFCE / 경량화된 디스플레이 매니저로, 다양한 데스크탑 환경을 지원합니다.</p>
+    </details>
+    <details>
+        <summary>SDDM (Simple Desktop Display Manager)</summary>
+        <p>KDE Plasma와 함께 사용되는 디스플레이 매니저입니다.</p>
+    </details>
