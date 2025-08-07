@@ -459,3 +459,165 @@ date: 2025-08-04
         <summary>SDDM (Simple Desktop Display Manager)</summary>
         <p>KDE Plasma와 함께 사용되는 디스플레이 매니저입니다.</p>
     </details>
+
+---
+## 셸
+- 셸은 사용자와 운영체제 간의 인터페이스 역할을 합니다.
+- 셸의 종류
+    <details>
+        <summary>Bash (Bourne Again SHell)</summary>
+        <p>리눅스에서 가장 널리 사용되는 셸로, 스크립트 작성과 명령어 실행에 사용됩니다.</p>
+    </details>
+    <details>
+        <summary>Zsh (Z Shell)</summary>
+        <p>강력한 기능과 사용자 정의 옵션을 제공하는 셸입니다.</p>
+    </details>
+    <details>
+        <summary>Fish (Friendly Interactive SHell)</summary>
+        <p>사용자 친화적인 인터페이스와 자동 완성 기능을 갖춘 셸입니다.</p>
+    </details>
+
+- 셸 환경 설정 파일
+    <details>
+        <summary>/etc/profile</summary>
+        <p>시스템 전체의 셸 환경 설정 파일로, 모든 사용자에게 적용됩니다.</p>
+    </details>
+    <details>
+        <summary>/etc/bash.bashrc</summary>
+        <p>Bash 셸의 시스템 전체 환경 설정 파일로, 모든 사용자에게 적용됩니다.</p>
+    </details>
+    <details>
+        <summary>~/.bash_profile</summary>
+        <p>사용자 개인의 Bash 셸 환경 설정 파일로, 로그인 시 실행됩니다.</p>
+    </details>
+    <details>
+        <summary>~/.bashrc</summary>
+        <p>사용자 개인의 Bash 셸 환경 설정 파일로, 인터랙티브 셸에서 실행됩니다.</p>
+    </details>
+    
+- 셸 명령어 정리
+    <details>
+        <summary>echo</summary>
+        <p>문자열 출력</p>
+    </details>
+    <details>
+        <summary>alias</summary>
+        <p>명령어에 별칭 설정</p>
+    </details>
+    <details>
+        <summary>source</summary>
+        <p>셸 스크립트 또는 설정 파일 재실행</p>
+    </details>
+    <details>
+        <summary>export</summary>
+        <p>환경 변수 설정</p>
+    </details>
+    <details>
+        <summary>which </summary>
+        <p>명령어의 실행 파일 위치 확인</p>
+    </details>
+  
+## 셸 프로그래밍
+- 셸 스크립트는 셸 명령어를 모아 작성한 프로그램입니다.
+- 셸 종류 선언
+    <details>
+        <summary>#!/bin/bash</summary>
+        <p>Bash 셸 스크립트</p>
+    </details>
+    <details>
+        <summary>#!/bin/sh</summary>
+        <p>POSIX 호환 셸 스크립트</p>
+    </details>
+    <details>
+        <summary>#!/usr/bin/env python3</summary>
+        <p>파이썬 스크립트</p>
+    </details>
+---
+
+## 프로세스
+- 프로세스는 실행 중인 프로그램을 의미하며, 리눅스에서 중요한 개념입니다.
+
+- 프로세스 상태
+    <details>
+        <summary>Running (R)</summary>
+        <p>실행 중인 프로세스</p>
+    </details>
+    <details>
+        <summary>Sleeping (S)</summary>
+        <p>대기 중인 프로세스</p>
+    </details>
+      <details>
+        <summary>D (Uninterruptible Sleep)</summary>
+        <p>인터럽트 불가 대기 (예: I/O 대기 중)</p>
+    </details>
+    <details>
+        <summary>Stopped (T)</summary>
+        <p>중지된 프로세스</p>
+    </details>
+    <details>
+        <summary>Zombies (Z)</summary>
+        <p>종료되었지만 부모 프로세스가 아직 수집하지 않은 프로세스</p>
+    </details>
+
+- 프로세스 확인 및 관리 명령어
+    <details>
+        <summary>ps</summary>
+        <p>현재 실행 중인 프로세스 목록을 확인합니다.</p>
+    </details>
+    <details>
+        <summary>top</summary>
+        <p>실시간으로 프로세스 상태를 모니터링합니다.</p>
+    </details>
+    <details>
+        <summary>htop</summary>
+        <p>top의 대안으로, 더 직관적인 인터페이스를 제공합니다.</p>
+    </details>
+    <details>
+        <summary>kill</summary>
+        <p>프로세스를 종료합니다.</p>
+    </details>
+    <details>
+        <summary>killall</summary>
+        <p>특정 이름을 가진 모든 프로세스를 종료합니다.</p>
+    </details>
+
+- 프로세스 우선순위
+    <details>
+        <summary>nice</summary>
+        <p>프로세스의 우선순위를 조정합니다.</p>
+    </details>
+    <details>
+        <summary>renice</summary>
+        <p>실행 중인 프로세스의 우선순위를 변경합니다.</p>
+    </details>
+
+- 명령어 사용
+    <details>
+        <summary>nice -n [값] [명령어]</summary>
+        <p>새로운 프로세스를 생성할 때 우선순위를 설정합니다.</p>
+    </details>
+    <details>
+        <summary>renice -n [값] -p [PID]</summary>
+        <p>실행 중인 프로세스의 우선순위를 변경합니다.</p>
+    </details>
+    <details>
+        <summary>일반 사용자 사용 가능 범위</summary>
+        <p>-19 ~ +19</p>
+    </details>
+    <details>
+        <summary>root 사용자 사용 가능 범위</summary>
+        <p>-20 ~ +19</p> 
+    </details>
+
+- fork / exec
+    <details>
+        <summary>fork</summary>
+        <p>현재 프로세스를 복제하여 새로운 프로세스를 생성합니다.</p>
+        <p>새로운 프로세스는 부모 프로세스의 메모리 공간을 복사합니다.</p>
+    </details>
+    <details>
+        <summary>exec</summary>
+        <p>현재 프로세스의 메모리 공간을 새로운 프로그램으로 대체합니다.</p>
+        <p>fork로 만든 자식 프로세스에서 주로 사용</p>
+        <p>새로운 프로그램이 실행되며, 기존 프로세스는 종료됩니다.</p>
+    </details>
