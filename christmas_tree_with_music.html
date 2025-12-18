@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>크리스마스 트리 - 눈 내리는 밤</title>
     <style>
         * {
@@ -834,6 +834,291 @@
 
         .hidden {
             display: none;
+        }
+
+        /* 반응형 스타일 */
+        @media screen and (max-width: 768px) {
+            /* 패널을 상하로 재배치 */
+            .playlist-panel {
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 350px;
+                max-height: 40vh;
+            }
+
+            .playlist-panel.collapsed {
+                top: 20px;
+                left: 20px;
+                transform: none;
+                width: 60px;
+            }
+
+            .message-panel {
+                bottom: 180px;
+                right: 50%;
+                top: auto;
+                transform: translateX(50%);
+                width: 90%;
+                max-width: 350px;
+            }
+
+            .message-panel.collapsed {
+                bottom: 180px;
+                right: 20px;
+                transform: none;
+                width: 60px;
+            }
+
+            /* 트리 크기 조정 */
+            .tree-section:nth-child(2) {
+                border-width: 0 40px 50px 40px;
+            }
+
+            .tree-section:nth-child(3) {
+                border-width: 0 55px 55px 55px;
+            }
+
+            .tree-section:nth-child(4) {
+                border-width: 0 70px 65px 70px;
+            }
+
+            .tree-section:nth-child(5) {
+                border-width: 0 85px 70px 85px;
+            }
+
+            .trunk {
+                width: 35px;
+                height: 50px;
+            }
+
+            .light {
+                width: 6px;
+                height: 6px;
+            }
+
+            /* 메시지 크기 조정 */
+            .message {
+                font-size: 16px;
+                margin-bottom: 20px;
+                padding: 0 20px;
+            }
+
+            /* 음악 컨트롤 조정 */
+            .music-control {
+                bottom: 20px;
+                width: 90%;
+                max-width: 400px;
+            }
+
+            .progress-container {
+                width: 100%;
+                padding: 8px 12px;
+            }
+
+            .volume-control {
+                padding: 6px 12px;
+            }
+
+            .volume-slider {
+                width: 80px;
+            }
+
+            .music-btn {
+                width: 45px;
+                height: 45px;
+            }
+
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+            }
+
+            .music-title {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            /* 토글 버튼 크기 */
+            .playlist-toggle,
+            .message-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            /* 입력 요소 터치 친화적으로 */
+            .song-input,
+            .message-textarea {
+                font-size: 16px; /* iOS 줌 방지 */
+            }
+
+            .add-btn,
+            .save-message-btn,
+            .reset-message-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            /* 더 작은 화면 */
+            .playlist-panel,
+            .message-panel {
+                width: 85%;
+                max-width: 300px;
+            }
+
+            .playlist-panel.collapsed,
+            .message-panel.collapsed {
+                width: 55px;
+            }
+
+            /* 트리 더 작게 */
+            .tree-section:nth-child(2) {
+                border-width: 0 35px 45px 35px;
+            }
+
+            .tree-section:nth-child(3) {
+                border-width: 0 50px 50px 50px;
+            }
+
+            .tree-section:nth-child(4) {
+                border-width: 0 65px 60px 65px;
+            }
+
+            .tree-section:nth-child(5) {
+                border-width: 0 80px 65px 80px;
+            }
+
+            .trunk {
+                width: 30px;
+                height: 45px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+
+            .music-control {
+                width: 95%;
+            }
+
+            .volume-slider {
+                width: 60px;
+            }
+
+            .music-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .nav-btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            .playlist-toggle,
+            .message-toggle {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+        }
+
+        @media screen and (max-height: 700px) {
+            /* 세로로 짧은 화면 */
+            .playlist-panel {
+                max-height: 35vh;
+            }
+
+            .message-panel {
+                bottom: 160px;
+            }
+
+            .message-panel.collapsed {
+                bottom: 160px;
+            }
+
+            .tree-section:nth-child(2) {
+                border-width: 0 35px 40px 35px;
+            }
+
+            .tree-section:nth-child(3) {
+                border-width: 0 50px 45px 50px;
+            }
+
+            .tree-section:nth-child(4) {
+                border-width: 0 65px 50px 65px;
+            }
+
+            .tree-section:nth-child(5) {
+                border-width: 0 80px 55px 80px;
+            }
+
+            .trunk {
+                height: 40px;
+            }
+        }
+
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            /* 가로 모드 */
+            .playlist-panel {
+                left: 10px;
+                top: 10px;
+                transform: none;
+                width: 250px;
+                max-height: 80vh;
+            }
+
+            .message-panel {
+                right: 10px;
+                top: 10px;
+                bottom: auto;
+                transform: none;
+                width: 250px;
+            }
+
+            .playlist-panel.collapsed {
+                left: 10px;
+            }
+
+            .message-panel.collapsed {
+                right: 10px;
+                top: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .message {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+
+            /* 트리 작게 */
+            .tree-section:nth-child(2) {
+                border-width: 0 30px 35px 30px;
+            }
+
+            .tree-section:nth-child(3) {
+                border-width: 0 45px 40px 45px;
+            }
+
+            .tree-section:nth-child(4) {
+                border-width: 0 60px 45px 60px;
+            }
+
+            .tree-section:nth-child(5) {
+                border-width: 0 75px 50px 75px;
+            }
+
+            .trunk {
+                width: 25px;
+                height: 35px;
+            }
         }
     </style>
 </head>
