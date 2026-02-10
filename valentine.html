@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOVE - Valentine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DungGeunMo&display=swap');
+  @font-face {
+    font-family: 'DungGeunMo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'DungGeunMo', 'Press Start 2P', monospace;
+    background-color: #f5e6d3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    image-rendering: pixelated;
+  }
+
+  /* Scattered hearts background */
+  .bg-hearts {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-heart {
+    position: absolute;
+    color: #d4878f;
+    font-size: 8px;
+    opacity: 0.5;
+    animation: floatHeart 6s ease-in-out infinite;
+  }
+
+  @keyframes floatHeart {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.1); }
+  }
+
+  /* Window container */
+  .window {
+    position: relative;
+    z-index: 1;
+    width: 380px;
+    background: #e8c8d0;
+    border: 3px solid #8b4557;
+    border-radius: 2px;
+    box-shadow:
+      inset 1px 1px 0 #f0d8de,
+      inset -1px -1px 0 #c4a0aa,
+      4px 4px 0 rgba(0,0,0,0.15);
+  }
+
+  /* Title bar */
+  .title-bar {
+    background: linear-gradient(180deg, #d46b7a 0%, #c45a6a 50%, #b84a5a 100%);
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #8b4557;
+  }
+
+  .title-text {
+    color: #fff;
+    font-size: 11px;
+    text-shadow: 1px 1px 0 #8b4557;
+    letter-spacing: 3px;
+  }
+
+  .title-buttons {
+    display: flex;
+    gap: 3px;
+  }
+
+  .title-btn {
+    width: 18px;
+    height: 18px;
+    background: #e8c8d0;
+    border: 2px solid #8b4557;
+    border-top-color: #f0d8de;
+    border-left-color: #f0d8de;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: #8b4557;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .title-btn:active {
+    border-top-color: #8b4557;
+    border-left-color: #8b4557;
+    border-bottom-color: #f0d8de;
+    border-right-color: #f0d8de;
+  }
+
+  /* Hearts toolbar */
+  .hearts-bar {
+    background: #dbb8c2;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    border-bottom: 2px solid #c4a0aa;
+  }
+
+  .toolbar-heart {
+    font-size: 14px;
+    color: #c45a6a;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .toolbar-heart:nth-child(2) { animation-delay: 0.2s; }
+  .toolbar-heart:nth-child(3) { animation-delay: 0.4s; }
+  .toolbar-heart:nth-child(4) { animation-delay: 0.6s; }
+  .toolbar-heart:nth-child(5) { animation-delay: 0.8s; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* Content area */
+  .content {
+    background: #f0dde3;
+    margin: 10px;
+    padding: 25px 20px 20px;
+    border: 2px solid #c4a0aa;
+    border-top-color: #8b4557;
+    border-left-color: #8b4557;
+    border-bottom-color: #f0d8de;
+    border-right-color: #f0d8de;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Top hearts in content */
+  .content-hearts {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .content-heart {
+    font-size: 16px;
+    color: #c45a6a;
+  }
+
+  .question {
+    font-size: 12px;
+    color: #5a3040;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
+  /* Cat pixel art */
+  .cat-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pixel-cat {
+    width: 80px;
+    height: 80px;
+    position: relative;
+  }
+
+  /* CSS Pixel Cat */
+  .cat-pixel {
+    position: absolute;
+    image-rendering: pixelated;
+  }
+
+  .cat-canvas {
+    display: grid;
+    grid-template-columns: repeat(16, 5px);
+    grid-template-rows: repeat(16, 5px);
+    image-rendering: pixelated;
+  }
+
+  .cat-canvas .b { background: #2a2a2a; }
+  .cat-canvas .g { background: #4a4a4a; }
+  .cat-canvas .w { background: #e0e0e0; }
+  .cat-canvas .r { background: #c45a6a; }
+  .cat-canvas .p { background: #ff8a9a; }
+  .cat-canvas .y { background: #f0c040; }
+  .cat-canvas .t { background: transparent; }
+  .cat-canvas .s { background: #7a5a3a; }
+  .cat-canvas .gr { background: #90c850; }
+
+  /* Button area */
+  .button-area {
+    padding: 10px 10px 12px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  /* YES button */
+  .yes-btn {
+    background: #f0e8c8;
+    border: 2px solid #8b7744;
+    border-top-color: #f5f0d8;
+    border-left-color: #f5f0d8;
+    padding: 6px 18px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: #5a4a20;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+
+  .yes-btn:hover {
+    background: #c45a6a;
+    color: #fff;
+    border-color: #8b4557;
+  }
+
+  .yes-btn:active {
+    border-top-color: #8b7744;
+    border-left-color: #8b7744;
+    border-bottom-color: #f5f0d8;
+    border-right-color: #f5f0d8;
+  }
+
+  /* NO button */
+  .no-btn {
+    background: #e8c8d0;
+    border: 2px solid #8b4557;
+    border-top-color: #f0d8de;
+    border-left-color: #f0d8de;
+    padding: 6px 18px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: #8b4557;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .no-btn:hover {
+    animation: runAway 0.3s ease-in-out;
+  }
+
+  @keyframes runAway {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-3px, -2px); }
+    50% { transform: translate(2px, -1px); }
+    75% { transform: translate(-2px, 1px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* Success overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(196, 90, 106, 0.3);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .overlay.active {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .success-message {
+    background: #f0dde3;
+    border: 3px solid #c45a6a;
+    padding: 30px 40px;
+    text-align: center;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+  }
+
+  .success-message p {
+    font-size: 14px;
+    color: #c45a6a;
+    line-height: 2;
+  }
+
+  .success-hearts {
+    font-size: 20px;
+    margin-top: 10px;
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  /* Falling hearts animation */
+  .falling-heart {
+    position: fixed;
+    top: -20px;
+    font-size: 16px;
+    color: #c45a6a;
+    z-index: 11;
+    animation: fall linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background scattered hearts -->
+<div class="bg-hearts" id="bgHearts"></div>
+
+<!-- Main Window -->
+<div class="window">
+  <!-- Title Bar -->
+  <div class="title-bar">
+    <span class="title-text">LOVE</span>
+    <div class="title-buttons">
+      <div class="title-btn">_</div>
+      <div class="title-btn">&#9633;</div>
+      <div class="title-btn">X</div>
+    </div>
+  </div>
+
+  <!-- Hearts Toolbar -->
+  <div class="hearts-bar">
+    <span class="toolbar-heart">&#9829;</span>
+    <span class="toolbar-heart">&#9829;</span>
+    <span class="toolbar-heart">&#9829;</span>
+    <span class="toolbar-heart">&#9829;</span>
+    <span class="toolbar-heart">&#9829;</span>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content">
+    <div class="content-hearts">
+      <span class="content-heart">&#9829;</span>
+      <span class="content-heart">&#9829;</span>
+      <span class="content-heart">&#9829;</span>
+    </div>
+
+    <p class="question">Will you be my<br>Valentine?</p>
+
+    <!-- Pixel Cat -->
+    <div class="cat-container">
+      <div class="cat-canvas">
+        <!--        1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 -->
+        <!-- Row 1: ears -->
+        <i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+        <!-- Row 2 -->
+        <i class="b"></i><i class="b"></i><i class="g"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="g"></i><i class="b"></i><i class="b"></i>
+        <!-- Row 3 -->
+        <i class="b"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="b"></i>
+        <!-- Row 4: head top -->
+        <i class="b"></i><i class="g"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="g"></i><i class="b"></i>
+        <!-- Row 5: head -->
+        <i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+        <!-- Row 6: eyes -->
+        <i class="t"></i><i class="b"></i><i class="b"></i><i class="y"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="y"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+        <!-- Row 7: eyes detail + nose -->
+        <i class="t"></i><i class="b"></i><i class="b"></i><i class="w"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="w"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+        <!-- Row 8: mouth -->
+        <i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="p"></i><i class="p"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+        <!-- Row 9: chin -->
+        <i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 10: neck + scarf -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 11: body -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 12: body + arms -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 13: body bottom -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 14: feet -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 15 -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        <!-- Row 16: empty -->
+        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="button-area">
+    <button class="yes-btn" id="yesBtn">YES</button>
+    <button class="no-btn" id="noBtn">NO</button>
+  </div>
+</div>
+
+<!-- Success Overlay -->
+<div class="overlay" id="overlay">
+  <div class="success-message">
+    <p>Happy 민준 현진 <br>Valentine's Day!</p>
+    <div class="success-hearts">&#9829; &#9829; &#9829;</div>
+  </div>
+</div>
+
+<script>
+  // Generate background hearts
+  const bgHearts = document.getElementById('bgHearts');
+  for (let i = 0; i < 40; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'bg-heart';
+    heart.textContent = '\u2665';
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.top = Math.random() * 100 + '%';
+    heart.style.fontSize = (6 + Math.random() * 8) + 'px';
+    heart.style.opacity = 0.2 + Math.random() * 0.4;
+    heart.style.animationDelay = Math.random() * 6 + 's';
+    bgHearts.appendChild(heart);
+  }
+
+  // YES button
+  document.getElementById('yesBtn').addEventListener('click', function() {
+    document.getElementById('overlay').classList.add('active');
+
+    // Create falling hearts
+    for (let i = 0; i < 30; i++) {
+      setTimeout(() => {
+        const heart = document.createElement('span');
+        heart.className = 'falling-heart';
+        heart.textContent = '\u2665';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (12 + Math.random() * 20) + 'px';
+        heart.style.animationDuration = (2 + Math.random() * 3) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }, i * 100);
+    }
+  });
+
+  // NO button - runs away from cursor
+  const noBtn = document.getElementById('noBtn');
+  noBtn.addEventListener('mouseover', function() {
+    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = randomX + 'px';
+    noBtn.style.top = randomY + 'px';
+    noBtn.style.zIndex = '100';
+  });
+
+  // Close overlay on click
+  document.getElementById('overlay').addEventListener('click', function() {
+    this.classList.remove('active');
+  });
+</script>
+
+</body>
+</html>
