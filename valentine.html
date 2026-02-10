@@ -49,8 +49,42 @@
   }
 
   @keyframes floatHeart {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-5px) scale(1.1); }
+    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+    25% { transform: translateY(-4px) scale(1.05) rotate(-3deg); }
+    50% { transform: translateY(-7px) scale(1.1) rotate(0deg); }
+    75% { transform: translateY(-3px) scale(1.05) rotate(3deg); }
+  }
+
+  /* Sparkle particles */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 5;
+    width: 4px;
+    height: 4px;
+    background: #ffdd57;
+    animation: sparkleAnim 0.8s ease-out forwards;
+  }
+
+  .sparkle::before, .sparkle::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sparkle::before {
+    transform: rotate(45deg) translate(2px, -2px);
+  }
+
+  .sparkle::after {
+    transform: rotate(-45deg) translate(-2px, -2px);
+  }
+
+  @keyframes sparkleAnim {
+    0% { opacity: 1; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0) translateY(-20px); }
   }
 
   /* Window container */
@@ -65,6 +99,12 @@
       inset 1px 1px 0 #f0d8de,
       inset -1px -1px 0 #c4a0aa,
       4px 4px 0 rgba(0,0,0,0.15);
+    animation: windowAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes windowAppear {
+    0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
   }
 
   /* Title bar */
@@ -174,6 +214,23 @@
     color: #5a3040;
     margin-bottom: 20px;
     line-height: 1.8;
+    min-height: 2.4em;
+  }
+
+  /* Typing cursor */
+  .typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: #5a3040;
+    margin-left: 2px;
+    animation: blink 0.6s step-end infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
   }
 
   /* Cat pixel art */
@@ -182,6 +239,40 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  /* Cat speech bubble */
+  .cat-speech {
+    position: absolute;
+    top: -35px;
+    right: -60px;
+    background: #fff;
+    border: 2px solid #8b4557;
+    padding: 4px 8px;
+    font-size: 10px;
+    color: #c45a6a;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  .cat-speech::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 15px;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-right: 2px solid #8b4557;
+    border-bottom: 2px solid #8b4557;
+    transform: rotate(45deg);
+  }
+
+  .cat-speech.show {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .pixel-cat {
@@ -201,6 +292,12 @@
     grid-template-columns: repeat(16, 5px);
     grid-template-rows: repeat(16, 5px);
     image-rendering: pixelated;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .cat-canvas:hover {
+    transform: scale(1.05);
   }
 
   .cat-canvas .b { background: #2a2a2a; }
@@ -212,6 +309,60 @@
   .cat-canvas .t { background: transparent; }
   .cat-canvas .s { background: #7a5a3a; }
   .cat-canvas .gr { background: #90c850; }
+
+  /* Blinking eyes */
+  .cat-canvas .eye {
+    transition: background 0.1s;
+  }
+
+  .cat-canvas.blinking .eye-top {
+    background: #2a2a2a !important;
+  }
+
+  /* Bouncing cat animation */
+  .cat-bounce {
+    animation: catBounce 2s ease-in-out infinite;
+  }
+
+  @keyframes catBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  /* Cat holding heart */
+  .cat-heart-held {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #c45a6a;
+    animation: heartFloat 1.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes heartFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-3px); }
+  }
+
+  /* Tail wagging */
+  .cat-tail {
+    position: absolute;
+    bottom: 12px;
+    right: -8px;
+    width: 3px;
+    height: 12px;
+    background: #2a2a2a;
+    border-radius: 2px;
+    transform-origin: bottom center;
+    animation: tailWag 1s ease-in-out infinite;
+  }
+
+  @keyframes tailWag {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+  }
 
   /* Button area */
   .button-area {
@@ -232,21 +383,46 @@
     font-size: 9px;
     color: #5a4a20;
     cursor: pointer;
-    transition: all 0.1s;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .yes-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(196, 90, 106, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
   }
 
   .yes-btn:hover {
     background: #c45a6a;
     color: #fff;
     border-color: #8b4557;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(196, 90, 106, 0.4);
+  }
+
+  .yes-btn:hover::after {
+    width: 120px;
+    height: 120px;
   }
 
   .yes-btn:active {
+    transform: scale(0.95);
     border-top-color: #8b7744;
     border-left-color: #8b7744;
     border-bottom-color: #f5f0d8;
     border-right-color: #f5f0d8;
   }
+
+  /* YES button grows via JS inline styles */
 
   /* NO button */
   .no-btn {
@@ -259,20 +435,10 @@
     font-size: 9px;
     color: #8b4557;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
   }
 
-  .no-btn:hover {
-    animation: runAway 0.3s ease-in-out;
-  }
-
-  @keyframes runAway {
-    0% { transform: translate(0, 0); }
-    25% { transform: translate(-3px, -2px); }
-    50% { transform: translate(2px, -1px); }
-    75% { transform: translate(-2px, 1px); }
-    100% { transform: translate(0, 0); }
-  }
+  /* NO button shrinks via JS inline styles */
 
   /* Success overlay */
   .overlay {
@@ -284,11 +450,12 @@
     z-index: 10;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.5s ease;
+    backdrop-filter: blur(2px);
   }
 
   .overlay.active {
     display: flex;
+    animation: fadeIn 0.5s ease;
   }
 
   @keyframes fadeIn {
@@ -296,18 +463,78 @@
     to { opacity: 1; }
   }
 
-  .success-message {
+  .success-window {
+    background: #e8c8d0;
+    border: 3px solid #8b4557;
+    border-radius: 2px;
+    box-shadow:
+      inset 1px 1px 0 #f0d8de,
+      inset -1px -1px 0 #c4a0aa,
+      4px 4px 0 rgba(0,0,0,0.15);
+    width: 340px;
+    animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes successPop {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .success-title-bar {
+    background: linear-gradient(180deg, #d46b7a 0%, #c45a6a 50%, #b84a5a 100%);
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid #8b4557;
+  }
+
+  .success-title-text {
+    color: #fff;
+    font-size: 10px;
+    text-shadow: 1px 1px 0 #8b4557;
+    letter-spacing: 2px;
+  }
+
+  .success-content {
     background: #f0dde3;
-    border: 3px solid #c45a6a;
-    padding: 30px 40px;
+    margin: 8px;
+    padding: 25px 20px;
+    border: 2px solid #c4a0aa;
+    border-top-color: #8b4557;
+    border-left-color: #8b4557;
+    border-bottom-color: #f0d8de;
+    border-right-color: #f0d8de;
     text-align: center;
-    box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+  }
+
+  .success-cat {
+    font-size: 32px;
+    margin-bottom: 10px;
+    animation: catDance 0.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes catDance {
+    0% { transform: rotate(-5deg) scale(1); }
+    100% { transform: rotate(5deg) scale(1.1); }
   }
 
   .success-message p {
-    font-size: 14px;
+    font-size: 13px;
     color: #c45a6a;
-    line-height: 2;
+    line-height: 2.2;
+  }
+
+  .success-names {
+    font-size: 16px;
+    color: #8b4557;
+    margin: 10px 0;
+    animation: nameGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes nameGlow {
+    0%, 100% { text-shadow: 0 0 5px rgba(196, 90, 106, 0.3); }
+    50% { text-shadow: 0 0 15px rgba(196, 90, 106, 0.6), 0 0 30px rgba(196, 90, 106, 0.3); }
   }
 
   .success-hearts {
@@ -316,12 +543,49 @@
     animation: pulse 1s ease-in-out infinite;
   }
 
+  .success-date {
+    font-size: 9px;
+    color: #b08090;
+    margin-top: 12px;
+    letter-spacing: 1px;
+  }
+
+  .success-btn-area {
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ok-btn {
+    background: #f0e8c8;
+    border: 2px solid #8b7744;
+    border-top-color: #f5f0d8;
+    border-left-color: #f5f0d8;
+    padding: 5px 24px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: #5a4a20;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ok-btn:hover {
+    background: #c45a6a;
+    color: #fff;
+    border-color: #8b4557;
+  }
+
+  .ok-btn:active {
+    border-top-color: #8b7744;
+    border-left-color: #8b7744;
+    border-bottom-color: #f5f0d8;
+    border-right-color: #f5f0d8;
+  }
+
   /* Falling hearts animation */
   .falling-heart {
     position: fixed;
     top: -20px;
-    font-size: 16px;
-    color: #c45a6a;
     z-index: 11;
     animation: fall linear forwards;
     pointer-events: none;
@@ -329,8 +593,53 @@
 
   @keyframes fall {
     to {
-      transform: translateY(110vh) rotate(360deg);
+      transform: translateY(110vh) rotate(720deg);
       opacity: 0;
+    }
+  }
+
+  /* Click ripple effect */
+  .click-ripple {
+    position: fixed;
+    pointer-events: none;
+    z-index: 20;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #c45a6a;
+    border-radius: 50%;
+    animation: ripple 0.6s ease-out forwards;
+  }
+
+  @keyframes ripple {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; }
+  }
+
+  /* NO count display */
+  .no-count {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 7px;
+    color: #b08090;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .no-count.show {
+    opacity: 1;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 420px) {
+    .window {
+      width: 95vw;
+    }
+    .cat-speech {
+      right: -40px;
+      font-size: 8px;
     }
   }
 </style>
@@ -346,9 +655,9 @@
   <div class="title-bar">
     <span class="title-text">LOVE</span>
     <div class="title-buttons">
-      <div class="title-btn">_</div>
-      <div class="title-btn">&#9633;</div>
-      <div class="title-btn">X</div>
+      <div class="title-btn" id="minBtn">_</div>
+      <div class="title-btn" id="maxBtn">&#9633;</div>
+      <div class="title-btn" id="closeBtn">X</div>
     </div>
   </div>
 
@@ -369,61 +678,81 @@
       <span class="content-heart">&#9829;</span>
     </div>
 
-    <p class="question">Will you be my<br>Valentine?</p>
+    <p class="question" id="question"></p>
 
     <!-- Pixel Cat -->
     <div class="cat-container">
-      <div class="cat-canvas">
-        <!--        1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 -->
-        <!-- Row 1: ears -->
-        <i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i>
-        <!-- Row 2 -->
-        <i class="b"></i><i class="b"></i><i class="g"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="g"></i><i class="b"></i><i class="b"></i>
-        <!-- Row 3 -->
-        <i class="b"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="b"></i>
-        <!-- Row 4: head top -->
-        <i class="b"></i><i class="g"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="g"></i><i class="b"></i>
-        <!-- Row 5: head -->
-        <i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i>
-        <!-- Row 6: eyes -->
-        <i class="t"></i><i class="b"></i><i class="b"></i><i class="y"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="y"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="t"></i>
-        <!-- Row 7: eyes detail + nose -->
-        <i class="t"></i><i class="b"></i><i class="b"></i><i class="w"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="w"></i><i class="y"></i><i class="b"></i><i class="b"></i><i class="t"></i>
-        <!-- Row 8: mouth -->
-        <i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="p"></i><i class="p"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i>
-        <!-- Row 9: chin -->
-        <i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 10: neck + scarf -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="t"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 11: body -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 12: body + arms -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 13: body bottom -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 14: feet -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 15 -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
-        <!-- Row 16: empty -->
-        <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+      <div class="cat-speech" id="catSpeech">Meow~!</div>
+      <div class="cat-bounce">
+        <div class="cat-canvas" id="catCanvas">
+          <!--        1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 -->
+          <!-- Row 1: ears -->
+          <i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+          <!-- Row 2 -->
+          <i class="b"></i><i class="b"></i><i class="g"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="g"></i><i class="b"></i><i class="b"></i>
+          <!-- Row 3 -->
+          <i class="b"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="b"></i>
+          <!-- Row 4: head top -->
+          <i class="b"></i><i class="g"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="g"></i><i class="b"></i>
+          <!-- Row 5: head -->
+          <i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+          <!-- Row 6: eyes -->
+          <i class="t"></i><i class="b"></i><i class="b"></i><i class="y eye eye-top"></i><i class="y eye eye-top"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="y eye eye-top"></i><i class="y eye eye-top"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+          <!-- Row 7: eyes detail + nose -->
+          <i class="t"></i><i class="b"></i><i class="b"></i><i class="w eye"></i><i class="y eye"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="w eye"></i><i class="y eye"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+          <!-- Row 8: mouth -->
+          <i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="p"></i><i class="p"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i>
+          <!-- Row 9: chin -->
+          <i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 10: neck + scarf -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="r"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 11: body -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 12: body + arms -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 13: body bottom -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 14: feet -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 15 -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="b"></i><i class="b"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+          <!-- Row 16: empty -->
+          <i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i><i class="t"></i>
+        </div>
+        <div class="cat-tail"></div>
+        <span class="cat-heart-held">&#9829;</span>
       </div>
-
     </div>
   </div>
 
   <!-- Buttons -->
   <div class="button-area">
     <button class="yes-btn" id="yesBtn">YES</button>
-    <button class="no-btn" id="noBtn">NO</button>
+    <div style="position: relative;">
+      <button class="no-btn" id="noBtn">NO</button>
+      <span class="no-count" id="noCount"></span>
+    </div>
   </div>
 </div>
 
 <!-- Success Overlay -->
 <div class="overlay" id="overlay">
-  <div class="success-message">
-    <p>Happy 민준 현진 <br>Valentine's Day!</p>
-    <div class="success-hearts">&#9829; &#9829; &#9829;</div>
+  <div class="success-window">
+    <div class="success-title-bar">
+      <span class="success-title-text">&#9829; HAPPY VALENTINE &#9829;</span>
+    </div>
+    <div class="success-content">
+      <div class="success-cat" id="successCat"></div>
+      <div class="success-message">
+        <p class="success-names">&#9829; &#48124;&#51456; &amp; &#54788;&#51652; &#9829;</p>
+        <p>Happy<br>Valentine's Day!</p>
+      </div>
+      <div class="success-hearts">&#9829; &#9829; &#9829;</div>
+      <p class="success-date">2026.02.14</p>
+    </div>
+    <div class="success-btn-area">
+      <button class="ok-btn" id="okBtn">OK &#9829;</button>
+    </div>
   </div>
 </div>
 
@@ -433,51 +762,254 @@
   for (let i = 0; i < 40; i++) {
     const heart = document.createElement('span');
     heart.className = 'bg-heart';
-    heart.textContent = '\u2665';
+    heart.textContent = ['♥', '♡', '❤'][Math.floor(Math.random() * 3)];
     heart.style.left = Math.random() * 100 + '%';
     heart.style.top = Math.random() * 100 + '%';
     heart.style.fontSize = (6 + Math.random() * 8) + 'px';
-    heart.style.opacity = 0.2 + Math.random() * 0.4;
+    heart.style.opacity = 0.15 + Math.random() * 0.35;
     heart.style.animationDelay = Math.random() * 6 + 's';
+    heart.style.color = ['#d4878f', '#c45a6a', '#e8a0aa', '#b84a5a'][Math.floor(Math.random() * 4)];
     bgHearts.appendChild(heart);
   }
 
-  // YES button
-  document.getElementById('yesBtn').addEventListener('click', function() {
-    document.getElementById('overlay').classList.add('active');
+  // Typing animation for question
+  const questionEl = document.getElementById('question');
+  const questionText = 'Will you be my\nValentine?';
+  let charIndex = 0;
 
-    // Create falling hearts
-    for (let i = 0; i < 30; i++) {
-      setTimeout(() => {
-        const heart = document.createElement('span');
-        heart.className = 'falling-heart';
-        heart.textContent = '\u2665';
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (12 + Math.random() * 20) + 'px';
-        heart.style.animationDuration = (2 + Math.random() * 3) + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
-      }, i * 100);
+  function typeQuestion() {
+    if (charIndex < questionText.length) {
+      const char = questionText[charIndex];
+      if (char === '\n') {
+        questionEl.innerHTML += '<br>';
+      } else {
+        questionEl.innerHTML += char;
+      }
+      charIndex++;
+      setTimeout(typeQuestion, 80 + Math.random() * 40);
     }
+  }
+
+  setTimeout(typeQuestion, 800);
+
+  // Cat eye blinking
+  const catCanvas = document.getElementById('catCanvas');
+  function blinkEyes() {
+    catCanvas.classList.add('blinking');
+    setTimeout(() => {
+      catCanvas.classList.remove('blinking');
+    }, 150);
+  }
+
+  // Random blinking every 2-5 seconds
+  function scheduleBlink() {
+    const delay = 2000 + Math.random() * 3000;
+    setTimeout(() => {
+      blinkEyes();
+      scheduleBlink();
+    }, delay);
+  }
+  scheduleBlink();
+
+  // Cat click interaction
+  const catSpeech = document.getElementById('catSpeech');
+  const catMessages = ['Meow~!', 'Nyan~♥', 'Purr...', 'nya~!', '♥♥♥', 'Pick YES!'];
+  let msgIndex = 0;
+
+  catCanvas.addEventListener('click', function() {
+    catSpeech.textContent = catMessages[msgIndex % catMessages.length];
+    catSpeech.classList.add('show');
+    msgIndex++;
+
+    // Spawn sparkles
+    const rect = catCanvas.getBoundingClientRect();
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+        sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+        sparkle.style.background = ['#ffdd57', '#ff8a9a', '#c45a6a', '#f0c040'][Math.floor(Math.random() * 4)];
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 800);
+      }, i * 60);
+    }
+
+    setTimeout(() => {
+      catSpeech.classList.remove('show');
+    }, 1800);
   });
 
-  // NO button - runs away from cursor
+  // NO button escape counter & behavior
+  let noAttempts = 0;
   const noBtn = document.getElementById('noBtn');
-  noBtn.addEventListener('mouseover', function() {
+  const yesBtn = document.getElementById('yesBtn');
+  const noCount = document.getElementById('noCount');
+
+  // Base sizes
+  let yesFontSize = 9;
+  let yesPadV = 6;
+  let yesPadH = 18;
+  let noFontSize = 9;
+  let noPadV = 6;
+  let noPadH = 18;
+
+  function escapeNoBtn() {
+    noAttempts++;
+
+    // Show counter
+    if (noAttempts >= 2) {
+      noCount.textContent = noAttempts + ' tries...';
+      noCount.classList.add('show');
+    }
+
+    // YES grows infinitely every attempt
+    yesFontSize += 2;
+    yesPadV += 2;
+    yesPadH += 6;
+    yesBtn.style.fontSize = yesFontSize + 'px';
+    yesBtn.style.padding = yesPadV + 'px ' + yesPadH + 'px';
+
+    // NO shrinks (but not below 3px font)
+    noFontSize = Math.max(3, noFontSize - 0.5);
+    noPadV = Math.max(1, noPadV - 0.3);
+    noPadH = Math.max(3, noPadH - 1);
+    noBtn.style.fontSize = noFontSize + 'px';
+    noBtn.style.padding = noPadV + 'px ' + noPadH + 'px';
+
+    // Cat reacts
+    const reactions = ['No?!', 'Huh...', 'Really?', 'T_T', 'Please~', 'Why...', 'YESYES!', 'Come on!', 'Just YES!', 'DO IT!!'];
+    catSpeech.textContent = reactions[Math.min(noAttempts - 1, reactions.length - 1)];
+    catSpeech.classList.add('show');
+    setTimeout(() => catSpeech.classList.remove('show'), 1500);
+
+    // Move NO button to random position
     const maxX = window.innerWidth - noBtn.offsetWidth - 20;
     const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+    const randomX = Math.max(10, Math.random() * maxX);
+    const randomY = Math.max(10, Math.random() * maxY);
 
     noBtn.style.position = 'fixed';
     noBtn.style.left = randomX + 'px';
     noBtn.style.top = randomY + 'px';
     noBtn.style.zIndex = '100';
+  }
+
+  // Both mouse and touch support for NO button escape
+  noBtn.addEventListener('mouseover', escapeNoBtn);
+  noBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    escapeNoBtn();
   });
 
-  // Close overlay on click
-  document.getElementById('overlay').addEventListener('click', function() {
-    this.classList.remove('active');
+  // YES button
+  yesBtn.addEventListener('click', function() {
+    const overlay = document.getElementById('overlay');
+    overlay.classList.add('active');
+
+    // Animate success cat emoji
+    const successCat = document.getElementById('successCat');
+    const catFrames = ['(=^・ω・^=)', '(=^・ᆺ・^=)', '(=^・ω・^=)♥'];
+    let frame = 0;
+    const catAnim = setInterval(() => {
+      successCat.textContent = catFrames[frame % catFrames.length];
+      frame++;
+    }, 600);
+
+    // Store interval for cleanup
+    overlay.dataset.catAnim = catAnim;
+
+    // Create falling hearts with variety
+    const heartTypes = ['♥', '♡', '❤', '💕', '✿', '★'];
+    const heartColors = ['#c45a6a', '#ff8a9a', '#d4878f', '#ffdd57', '#f0c040', '#e8a0aa'];
+    for (let i = 0; i < 50; i++) {
+      setTimeout(() => {
+        const heart = document.createElement('span');
+        heart.className = 'falling-heart';
+        heart.textContent = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (12 + Math.random() * 24) + 'px';
+        heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+        heart.style.animationDuration = (2 + Math.random() * 3) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }, i * 80);
+    }
+  });
+
+  // OK button closes overlay
+  document.getElementById('okBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const overlay = document.getElementById('overlay');
+
+    // Clear cat animation
+    if (overlay.dataset.catAnim) {
+      clearInterval(Number(overlay.dataset.catAnim));
+    }
+
+    overlay.classList.remove('active');
+  });
+
+  // Click overlay background to close
+  document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      if (this.dataset.catAnim) {
+        clearInterval(Number(this.dataset.catAnim));
+      }
+      this.classList.remove('active');
+    }
+  });
+
+  // Title bar button interactions
+  document.getElementById('closeBtn').addEventListener('click', function() {
+    catSpeech.textContent = "Don't go! ♥";
+    catSpeech.classList.add('show');
+    setTimeout(() => catSpeech.classList.remove('show'), 2000);
+
+    // Shake window
+    const win = document.querySelector('.window');
+    win.style.animation = 'none';
+    win.offsetHeight; // reflow
+    win.style.animation = 'shake 0.4s ease';
+  });
+
+  document.getElementById('minBtn').addEventListener('click', function() {
+    const win = document.querySelector('.window');
+    win.style.transition = 'transform 0.3s, opacity 0.3s';
+    win.style.transform = 'scale(0.01) translateY(100vh)';
+    win.style.opacity = '0';
+    setTimeout(() => {
+      win.style.transform = '';
+      win.style.opacity = '';
+      setTimeout(() => { win.style.transition = ''; }, 300);
+    }, 1000);
+  });
+
+  // Add shake keyframes dynamically
+  const shakeStyle = document.createElement('style');
+  shakeStyle.textContent = `
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px) rotate(-1deg); }
+      40% { transform: translateX(8px) rotate(1deg); }
+      60% { transform: translateX(-6px) rotate(-0.5deg); }
+      80% { transform: translateX(6px) rotate(0.5deg); }
+    }
+  `;
+  document.head.appendChild(shakeStyle);
+
+  // Click sparkle effect on body
+  document.body.addEventListener('click', function(e) {
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = (e.clientX + (Math.random() - 0.5) * 20) + 'px';
+        sparkle.style.top = (e.clientY + (Math.random() - 0.5) * 20) + 'px';
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 800);
+      }, i * 50);
+    }
   });
 </script>
 
