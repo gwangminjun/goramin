@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Master - 자격증 답안 체크 & 오답노트</title>
+<style>
+:root {
+  --primary: #4361ee;
+  --primary-light: #6b83f2;
+  --primary-dark: #3651d4;
+  --success: #2ecc71;
+  --success-dark: #27ae60;
+  --danger: #e74c3c;
+  --danger-dark: #c0392b;
+  --warning: #f39c12;
+  --warning-dark: #d68910;
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --surface-alt: #f8f9fa;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --border: #dee2e6;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --radius: 8px;
+  --radius-sm: 4px;
+  --radius-lg: 12px;
+  --transition: 0.2s ease;
+  --header-h: 56px;
+  --tab-h: 44px;
+  --status-h: 36px;
+  --cell-size: 52px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Header */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--primary);
+  color: white;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(67,97,238,0.3);
+}
+.header-title {
+  font-size: 18px; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.header-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white; padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13px;
+  transition: background var(--transition);
+  white-space: nowrap;
+}
+.header-btn:hover { background: rgba(255,255,255,0.25); }
+
+/* Tabs */
+.tabs {
+  position: fixed; top: var(--header-h); left: 0; right: 0;
+  height: var(--tab-h);
+  background: var(--surface);
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  z-index: 99;
+}
+.tab {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition);
+  user-select: none;
+}
+.tab:hover { color: var(--primary); background: rgba(67,97,238,0.04); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+/* Content */
+.content {
+  position: fixed;
+  top: calc(var(--header-h) + var(--tab-h));
+  bottom: var(--status-h);
+  left: 0; right: 0;
+  overflow-y: auto; overflow-x: hidden;
+  padding: 16px;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Status bar */
+.statusbar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: var(--status-h);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  font-size: 12px; color: var(--text-light);
+  z-index: 99;
+}
+
+/* Section */
+.section {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.section-title {
+  font-size: 16px; font-weight: 600;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 8px 16px;
+  border: none; border-radius: var(--radius);
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all var(--transition);
+  gap: 6px;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-success { background: var(--success); color: white; }
+.btn-success:hover { background: var(--success-dark); }
+.btn-danger { background: var(--danger); color: white; }
+.btn-danger:hover { background: var(--danger-dark); }
+.btn-outline {
+  background: transparent; color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.btn-outline:hover { background: rgba(67,97,238,0.08); }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+
+/* Form */
+.form-group { margin-bottom: 12px; }
+.form-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; color: var(--text); }
+.form-input, .form-textarea, .form-select {
+  width: 100%; padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px; font-family: inherit;
+  transition: border-color var(--transition);
+  background: var(--surface);
+  color: var(--text);
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67,97,238,0.15);
+}
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-row { display: flex; gap: 12px; }
+.form-row > * { flex: 1; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 90%; max-width: 520px; max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.25s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+/* Answer Grid */
+.answer-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+.answer-cell {
+  width: 100%; aspect-ratio: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-size: 12px;
+  position: relative;
+  background: var(--surface);
+  min-height: 48px;
+}
+.answer-cell .cell-num {
+  font-size: 10px; color: var(--text-light);
+  position: absolute; top: 2px; left: 4px;
+}
+.answer-cell .cell-val {
+  font-size: 18px; font-weight: 700;
+  color: var(--text-light);
+}
+.answer-cell.filled { border-color: var(--primary); background: rgba(67,97,238,0.05); }
+.answer-cell.filled .cell-val { color: var(--primary); }
+.answer-cell.focused {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67,97,238,0.25);
+  z-index: 1;
+}
+.answer-cell.correct { border-color: var(--success); background: rgba(46,204,113,0.08); }
+.answer-cell.correct .cell-val { color: var(--success-dark); }
+.answer-cell.wrong { border-color: var(--danger); background: rgba(231,76,60,0.08); }
+.answer-cell.wrong .cell-val { color: var(--danger-dark); }
+.answer-cell:hover { border-color: var(--primary-light); }
+@keyframes cellPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.answer-cell.pop { animation: cellPop 0.2s ease; }
+
+/* Grading result */
+.score-display {
+  text-align: center; padding: 24px;
+}
+.score-big {
+  font-size: 64px; font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.score-label { font-size: 14px; color: var(--text-light); margin-top: 4px; }
+.progress-bar-wrap {
+  width: 100%; height: 20px;
+  background: var(--surface-alt);
+  border-radius: 10px;
+  overflow: hidden; margin: 12px 0;
+  border: 1px solid var(--border);
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s ease;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+.progress-bar-fill.pass { background: linear-gradient(90deg, var(--success), #58d68d); }
+.progress-bar-fill.fail { background: linear-gradient(90deg, var(--danger), #ec7063); }
+
+.badge {
+  display: inline-block; padding: 6px 16px;
+  border-radius: 20px; font-size: 14px; font-weight: 600;
+  margin-top: 8px;
+}
+.badge-pass { background: rgba(46,204,113,0.15); color: var(--success-dark); }
+.badge-fail { background: rgba(231,76,60,0.15); color: var(--danger-dark); }
+
+.result-table {
+  width: 100%; border-collapse: collapse;
+  margin-top: 12px; font-size: 14px;
+}
+.result-table th, .result-table td {
+  padding: 10px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.result-table th {
+  background: var(--surface-alt);
+  font-weight: 600; font-size: 13px;
+  color: var(--text-light);
+}
+.result-table tr:last-child td { border-bottom: none; }
+.result-table .fail-cell { color: var(--danger); font-weight: 600; }
+.result-table .pass-cell { color: var(--success-dark); }
+
+/* Compare Grid */
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px; margin-top: 12px;
+}
+.compare-cell {
+  padding: 4px; text-align: center;
+  border-radius: var(--radius-sm);
+  font-size: 11px; line-height: 1.3;
+}
+.compare-cell .cmp-num { font-size: 9px; color: var(--text-light); }
+.compare-cell .cmp-ans { font-weight: 700; font-size: 13px; }
+.compare-cell .cmp-key { font-size: 10px; color: var(--text-light); }
+.compare-cell.cmp-correct { background: rgba(46,204,113,0.12); }
+.compare-cell.cmp-wrong { background: rgba(231,76,60,0.12); }
+.compare-cell.cmp-empty { background: var(--surface-alt); }
+
+/* Notebook cards */
+.note-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius);
+  padding: 16px; margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.note-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.note-card-num {
+  font-weight: 700; font-size: 16px; color: var(--danger);
+}
+.note-card-answers {
+  font-size: 13px; color: var(--text-light);
+}
+.note-card-answers span { font-weight: 600; }
+.note-card-answers .my-ans { color: var(--danger); }
+.note-card-answers .correct-ans { color: var(--success-dark); }
+
+.memo-area { margin-top: 10px; }
+.memo-toggle {
+  display: flex; gap: 4px; margin-bottom: 8px;
+}
+.memo-toggle-btn {
+  padding: 3px 10px; font-size: 12px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface-alt); cursor: pointer;
+  transition: all var(--transition);
+}
+.memo-toggle-btn.active {
+  background: var(--primary); color: white; border-color: var(--primary);
+}
+.memo-editor {
+  width: 100%; min-height: 80px; padding: 8px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: 'Consolas', 'D2Coding', monospace;
+  font-size: 13px; resize: vertical;
+  background: var(--surface);
+  color: var(--text);
+}
+.memo-editor:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67,97,238,0.15);
+}
+.memo-preview {
+  padding: 10px; font-size: 13px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface-alt);
+  min-height: 40px;
+}
+.memo-preview h1, .memo-preview h2, .memo-preview h3 { margin: 8px 0 4px; }
+.memo-preview h1 { font-size: 18px; }
+.memo-preview h2 { font-size: 16px; }
+.memo-preview h3 { font-size: 14px; }
+.memo-preview code {
+  background: #e8e8e8; padding: 1px 4px;
+  border-radius: 3px; font-size: 12px;
+}
+.memo-preview pre {
+  background: #2d2d2d; color: #f0f0f0;
+  padding: 10px; border-radius: var(--radius);
+  overflow-x: auto; margin: 8px 0;
+}
+.memo-preview pre code { background: none; color: inherit; }
+.memo-preview blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 12px; color: var(--text-light);
+  margin: 8px 0;
+}
+.memo-preview ul, .memo-preview ol { padding-left: 20px; margin: 4px 0; }
+.memo-preview a { color: var(--primary); }
+.memo-preview img { max-width: 100%; border-radius: var(--radius); margin: 8px 0; }
+
+/* Screenshot area */
+.screenshot-area { margin-top: 10px; }
+.screenshot-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.screenshot-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.screenshot-thumb {
+  position: relative; width: 100px; height: 80px;
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.screenshot-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.screenshot-thumb .remove-ss {
+  position: absolute; top: 2px; right: 2px;
+  width: 20px; height: 20px;
+  background: rgba(231,76,60,0.85); color: white;
+  border: none; border-radius: 50%;
+  font-size: 12px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.screenshot-lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none; align-items: center; justify-content: center;
+  z-index: 300; cursor: pointer;
+}
+.screenshot-lightbox.active { display: flex; }
+.screenshot-lightbox img {
+  max-width: 90%; max-height: 90%;
+  border-radius: var(--radius);
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.filter-chip {
+  padding: 4px 12px; font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px; cursor: pointer;
+  background: var(--surface);
+  transition: all var(--transition);
+}
+.filter-chip.active {
+  background: var(--primary); color: white;
+  border-color: var(--primary);
+}
+
+/* Toast */
+.toast-container {
+  position: fixed; top: calc(var(--header-h) + 8px);
+  right: 16px; z-index: 250;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 13px; color: white;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
+  max-width: 320px;
+}
+.toast-success { background: var(--success); }
+.toast-error { background: var(--danger); }
+.toast-info { background: var(--primary); }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Subject config rows */
+.subject-rows { margin-top: 8px; }
+.subject-row {
+  display: flex; gap: 8px; align-items: center;
+  margin-bottom: 6px;
+}
+.subject-row input { flex: 1; }
+.subject-row .remove-subject {
+  width: 28px; height: 28px;
+  background: var(--danger); color: white;
+  border: none; border-radius: 50%;
+  cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: var(--text-light);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .answer-grid, .compare-grid { grid-template-columns: repeat(5, 1fr); }
+}
+@media (max-width: 600px) {
+  .answer-grid, .compare-grid { grid-template-columns: repeat(4, 1fr); }
+  .header-title { font-size: 15px; }
+  .header-btn { padding: 5px 8px; font-size: 12px; }
+  .header-btn .btn-label { display: none; }
+  .section { padding: 14px; }
+  .form-row { flex-direction: column; gap: 8px; }
+  .modal { padding: 18px; width: 95%; }
+}
+
+/* Scrollbar */
+.content::-webkit-scrollbar { width: 6px; }
+.content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+.content::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+/* Subjects in answer grid header */
+.subject-divider {
+  grid-column: 1 / -1;
+  font-size: 13px; font-weight: 600;
+  color: var(--primary);
+  padding: 8px 4px 2px;
+  border-bottom: 1px solid var(--border);
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-title" id="headerTitle">Exam Master</div>
+  <div class="header-actions">
+    <button class="header-btn" onclick="App.openSettings()" title="시험 설정 (Ctrl+,)">&#9881; <span class="btn-label">설정</span></button>
+    <button class="header-btn" onclick="DataIO.exportJSON()" title="내보내기">&#8681; <span class="btn-label">내보내기</span></button>
+    <button class="header-btn" onclick="DataIO.triggerImport()" title="불러오기">&#8679; <span class="btn-label">불러오기</span></button>
+    <button class="header-btn" onclick="App.resetAll()" title="초기화">&#10227; <span class="btn-label">초기화</span></button>
+  </div>
+</header>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="DataIO.importJSON(event)">
+
+<!-- Tabs -->
+<nav class="tabs">
+  <div class="tab active" data-tab="input" onclick="App.switchTab('input')">&#9997; 답안 입력</div>
+  <div class="tab" data-tab="grading" onclick="App.switchTab('grading')">&#9989; 채점 결과</div>
+  <div class="tab" data-tab="notebook" onclick="App.switchTab('notebook')">&#128214; 오답 노트</div>
+</nav>
+
+<!-- Content -->
+<main class="content">
+  <!-- Tab 1: Answer Input -->
+  <div class="tab-panel active" id="panel-input">
+    <div class="section">
+      <div class="section-title">시험 설정 요약</div>
+      <div id="configSummary" style="font-size:13px;color:var(--text-light);">설정이 없습니다. [설정] 버튼을 눌러 시험을 설정하세요.</div>
+    </div>
+    <div class="section">
+      <div class="section-title">답안 입력 <span id="answerProgress" style="font-size:13px;color:var(--text-light);margin-left:auto;"></span></div>
+      <div id="answerGridWrap">
+        <div class="empty-state">
+          <div class="empty-state-icon">&#128221;</div>
+          <div class="empty-state-text">시험을 설정하면 답안 그리드가 생성됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: Grading -->
+  <div class="tab-panel" id="panel-grading">
+    <div class="section">
+      <div class="section-title">정답 입력</div>
+      <div class="form-group">
+        <label class="form-label">정답 데이터 (쉼표, 공백, 줄바꿈, JSON 형식 지원)</label>
+        <textarea class="form-textarea" id="answerKeyInput" rows="4" placeholder="예: 1,3,2,4,1,3 또는&#10;1 3 2 4 1 3 또는&#10;[1,3,2,4,1,3]"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="Grading.grade()">채점하기</button>
+    </div>
+    <div id="gradingResult" style="display:none;">
+      <div class="section">
+        <div class="section-title">총점</div>
+        <div class="score-display">
+          <div class="score-big" id="totalScore">0</div>
+          <div class="score-label" id="totalScoreLabel">0 / 0 문제</div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="totalProgress" style="width:0"></div></div>
+          <div id="passBadge"></div>
+        </div>
+      </div>
+      <div class="section" id="subjectResultSection" style="display:none;">
+        <div class="section-title">과목별 점수</div>
+        <table class="result-table">
+          <thead><tr><th>과목</th><th>문항</th><th>정답</th><th>점수</th><th>판정</th></tr></thead>
+          <tbody id="subjectResultBody"></tbody>
+        </table>
+      </div>
+      <div class="section">
+        <div class="section-title">답안 비교</div>
+        <div class="compare-grid" id="compareGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Notebook -->
+  <div class="tab-panel" id="panel-notebook">
+    <div class="filter-bar" id="notebookFilter"></div>
+    <div id="notebookCards">
+      <div class="empty-state">
+        <div class="empty-state-icon">&#128218;</div>
+        <div class="empty-state-text">채점을 완료하면 틀린 문제가 여기에 표시됩니다.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Status bar -->
+<footer class="statusbar">
+  <span id="statusLeft">준비</span>
+  <span id="statusRight">숫자: 답 입력 | 방향키: 이동 | Del: 삭제</span>
+</footer>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-title">시험 설정</div>
+    <div class="form-group">
+      <label class="form-label">시험명</label>
+      <input class="form-input" id="cfgExamName" placeholder="예: 정보처리기사 실기">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">총 문제 수</label>
+        <input class="form-input" id="cfgTotalQ" type="number" min="1" max="300" value="100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">선택지 수</label>
+        <input class="form-input" id="cfgChoices" type="number" min="2" max="10" value="4">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">합격 기준 (%)</label>
+        <input class="form-input" id="cfgPassScore" type="number" min="0" max="100" value="60">
+      </div>
+      <div class="form-group">
+        <label class="form-label">과락 기준 (%)</label>
+        <input class="form-input" id="cfgMinScore" type="number" min="0" max="100" value="40">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">과목 설정 (비워두면 단일 과목)</label>
+      <div class="subject-rows" id="subjectRows"></div>
+      <button class="btn btn-sm btn-outline" onclick="ExamSetup.addSubjectRow()" style="margin-top:6px;">+ 과목 추가</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="App.closeSettings()">취소</button>
+      <button class="btn btn-primary" onclick="ExamSetup.save()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Screenshot lightbox -->
+<div class="screenshot-lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <img id="lightboxImg" src="">
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ====================== Storage Module ====================== */
+const Storage = {
+  PREFIX: 'examChecker_',
+  get(key) {
+    try {
+      const raw = localStorage.getItem(this.PREFIX + key);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  },
+  set(key, val) {
+    try { localStorage.setItem(this.PREFIX + key, JSON.stringify(val)); } catch {}
+  },
+  remove(key) {
+    localStorage.removeItem(this.PREFIX + key);
+  },
+  clearAll() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k.startsWith(this.PREFIX)) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+  }
+};
+
+/* ====================== ImageDB Module ====================== */
+const ImageDB = {
+  DB_NAME: 'ExamCheckerDB',
+  STORE: 'screenshots',
+  VERSION: 1,
+  _db: null,
+
+  open() {
+    if (this._db) return Promise.resolve(this._db);
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(this.DB_NAME, this.VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(this.STORE)) {
+          db.createObjectStore(this.STORE, { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = (e) => { this._db = e.target.result; resolve(this._db); };
+      req.onerror = () => reject(req.error);
+    });
+  },
+
+  async put(id, data) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).put({ id, data, ts: Date.now() });
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+
+  async get(id) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readonly');
+      const req = tx.objectStore(this.STORE).get(id);
+      req.onsuccess = () => resolve(req.result ? req.result.data : null);
+      req.onerror = () => reject(req.error);
+    });
+  },
+
+  async getAll() {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readonly');
+      const req = tx.objectStore(this.STORE).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  },
+
+  async remove(id) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+
+  async clearAll() {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+};
+
+/* ====================== AppState Module ====================== */
+const AppState = {
+  defaults: {
+    config: { examName: '', totalQ: 100, choices: 4, passScore: 60, minScore: 40, subjects: [] },
+    answers: {},
+    answerKey: [],
+    gradingResult: null,
+    notes: {}
+  },
+
+  config: null,
+  answers: null,
+  answerKey: null,
+  gradingResult: null,
+  notes: null,
+
+  load() {
+    this.config = Storage.get('config') || { ...this.defaults.config };
+    this.answers = Storage.get('answers') || {};
+    this.answerKey = Storage.get('answerKey') || [];
+    this.gradingResult = Storage.get('gradingResult') || null;
+    this.notes = Storage.get('notes') || {};
+  },
+
+  save(key) {
+    if (key) {
+      Storage.set(key, this[key]);
+    } else {
+      Storage.set('config', this.config);
+      Storage.set('answers', this.answers);
+      Storage.set('answerKey', this.answerKey);
+      Storage.set('gradingResult', this.gradingResult);
+      Storage.set('notes', this.notes);
+    }
+  },
+
+  reset() {
+    Storage.clearAll();
+    this.config = { ...this.defaults.config, subjects: [] };
+    this.answers = {};
+    this.answerKey = [];
+    this.gradingResult = null;
+    this.notes = {};
+  }
+};
+
+/* ====================== ExamSetup Module ====================== */
+const ExamSetup = {
+  addSubjectRow(name, start, end) {
+    const wrap = document.getElementById('subjectRows');
+    const row = document.createElement('div');
+    row.className = 'subject-row';
+    row.innerHTML = `
+      <input class="form-input" placeholder="과목명" value="${name || ''}">
+      <input class="form-input" type="number" placeholder="시작" min="1" style="max-width:70px" value="${start || ''}">
+      <input class="form-input" type="number" placeholder="끝" min="1" style="max-width:70px" value="${end || ''}">
+      <button class="remove-subject" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    wrap.appendChild(row);
+  },
+
+  loadToModal() {
+    const c = AppState.config;
+    document.getElementById('cfgExamName').value = c.examName || '';
+    document.getElementById('cfgTotalQ').value = c.totalQ || 100;
+    document.getElementById('cfgChoices').value = c.choices || 4;
+    document.getElementById('cfgPassScore').value = c.passScore ?? 60;
+    document.getElementById('cfgMinScore').value = c.minScore ?? 40;
+    const wrap = document.getElementById('subjectRows');
+    wrap.innerHTML = '';
+    if (c.subjects && c.subjects.length) {
+      c.subjects.forEach(s => this.addSubjectRow(s.name, s.start, s.end));
+    }
+  },
+
+  save() {
+    const totalQ = parseInt(document.getElementById('cfgTotalQ').value) || 100;
+    const choices = parseInt(document.getElementById('cfgChoices').value) || 4;
+    if (totalQ < 1 || totalQ > 300) { App.toast('문제 수는 1~300 사이로 입력하세요.', 'error'); return; }
+    if (choices < 2 || choices > 10) { App.toast('선택지 수는 2~10 사이로 입력하세요.', 'error'); return; }
+
+    const subjects = [];
+    document.querySelectorAll('#subjectRows .subject-row').forEach(row => {
+      const inputs = row.querySelectorAll('input');
+      const name = inputs[0].value.trim();
+      const start = parseInt(inputs[1].value);
+      const end = parseInt(inputs[2].value);
+      if (name && start && end && start <= end) {
+        subjects.push({ name, start, end });
+      }
+    });
+
+    AppState.config = {
+      examName: document.getElementById('cfgExamName').value.trim(),
+      totalQ,
+      choices,
+      passScore: parseInt(document.getElementById('cfgPassScore').value) || 60,
+      minScore: parseInt(document.getElementById('cfgMinScore').value) || 40,
+      subjects
+    };
+    AppState.save('config');
+    App.closeSettings();
+    App.refreshAll();
+    App.toast('설정이 저장되었습니다.', 'success');
+  }
+};
+
+/* ====================== AnswerGrid Module ====================== */
+const AnswerGrid = {
+  focusedIndex: -1,
+
+  render() {
+    const wrap = document.getElementById('answerGridWrap');
+    const totalQ = AppState.config.totalQ;
+    if (!totalQ || totalQ < 1) {
+      wrap.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128221;</div><div class="empty-state-text">시험을 설정하면 답안 그리드가 생성됩니다.</div></div>';
+      return;
+    }
+
+    const subjects = AppState.config.subjects || [];
+    let html = '<div class="answer-grid" id="answerGrid">';
+
+    if (subjects.length > 0) {
+      let currentSubjectIdx = 0;
+      for (let i = 1; i <= totalQ; i++) {
+        // Check if a subject divider is needed
+        const subj = subjects.find(s => s.start === i);
+        if (subj) {
+          html += `<div class="subject-divider">${subj.name} (${subj.start}~${subj.end})</div>`;
+        }
+        html += this._cellHTML(i);
+      }
+    } else {
+      for (let i = 1; i <= totalQ; i++) {
+        html += this._cellHTML(i);
+      }
+    }
+
+    html += '</div>';
+    wrap.innerHTML = html;
+    this.updateAllCells();
+    this.updateProgress();
+  },
+
+  _cellHTML(num) {
+    return `<div class="answer-cell" data-num="${num}" onclick="AnswerGrid.clickCell(${num})"><span class="cell-num">${num}</span><span class="cell-val" id="cv${num}">-</span></div>`;
+  },
+
+  clickCell(num) {
+    this.setFocus(num);
+  },
+
+  setFocus(num) {
+    const totalQ = AppState.config.totalQ;
+    if (num < 1 || num > totalQ) return;
+    // Remove old focus
+    const old = document.querySelector('.answer-cell.focused');
+    if (old) old.classList.remove('focused');
+    // Set new
+    const cell = document.querySelector(`.answer-cell[data-num="${num}"]`);
+    if (cell) {
+      cell.classList.add('focused');
+      cell.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    this.focusedIndex = num;
+    document.getElementById('statusLeft').textContent = `문제 ${num} / ${totalQ} 선택됨`;
+  },
+
+  setAnswer(num, val) {
+    const choices = AppState.config.choices;
+    if (val < 1 || val > choices) return;
+    AppState.answers[String(num)] = val;
+    AppState.save('answers');
+    this.updateCell(num);
+    this.updateProgress();
+    // Animation
+    const cell = document.querySelector(`.answer-cell[data-num="${num}"]`);
+    if (cell) {
+      cell.classList.remove('pop');
+      void cell.offsetWidth;
+      cell.classList.add('pop');
+    }
+  },
+
+  clearAnswer(num) {
+    delete AppState.answers[String(num)];
+    AppState.save('answers');
+    this.updateCell(num);
+    this.updateProgress();
+  },
+
+  updateCell(num) {
+    const el = document.getElementById('cv' + num);
+    const cell = document.querySelector(`.answer-cell[data-num="${num}"]`);
+    if (!el || !cell) return;
+    const val = AppState.answers[String(num)];
+    // Clear grading classes
+    cell.classList.remove('correct', 'wrong');
+    if (val) {
+      el.textContent = val;
+      cell.classList.add('filled');
+    } else {
+      el.textContent = '-';
+      cell.classList.remove('filled');
+    }
+    // Apply grading state if exists
+    if (AppState.gradingResult && AppState.answerKey.length > 0) {
+      const key = AppState.answerKey[num - 1];
+      if (key !== undefined) {
+        if (val === key) {
+          cell.classList.add('correct');
+        } else if (val) {
+          cell.classList.add('wrong');
+        }
+      }
+    }
+  },
+
+  updateAllCells() {
+    const totalQ = AppState.config.totalQ;
+    for (let i = 1; i <= totalQ; i++) {
+      this.updateCell(i);
+    }
+  },
+
+  updateProgress() {
+    const totalQ = AppState.config.totalQ;
+    const filled = Object.keys(AppState.answers).filter(k => parseInt(k) <= totalQ).length;
+    const pct = totalQ > 0 ? Math.round((filled / totalQ) * 100) : 0;
+    document.getElementById('answerProgress').textContent = `${filled} / ${totalQ} (${pct}%)`;
+    document.getElementById('statusLeft').textContent = `진행률: ${filled}/${totalQ} (${pct}%)`;
+  }
+};
+
+/* ====================== KeyboardNav Module ====================== */
+const KeyboardNav = {
+  init() {
+    document.addEventListener('keydown', (e) => {
+      // Ignore when typing in inputs/textareas (except answer grid context)
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      // Ignore if modal is open
+      if (document.getElementById('settingsModal').classList.contains('active')) return;
+
+      const activeTab = document.querySelector('.tab.active')?.dataset.tab;
+      if (activeTab !== 'input') return;
+
+      const num = AnswerGrid.focusedIndex;
+      const totalQ = AppState.config.totalQ;
+      if (totalQ < 1) return;
+
+      // Number keys 1-9
+      if (e.key >= '1' && e.key <= '9') {
+        e.preventDefault();
+        const val = parseInt(e.key);
+        if (num < 1) {
+          AnswerGrid.setFocus(1);
+          AnswerGrid.setAnswer(1, val);
+          if (1 < totalQ) AnswerGrid.setFocus(2);
+        } else {
+          AnswerGrid.setAnswer(num, val);
+          if (num < totalQ) AnswerGrid.setFocus(num + 1);
+        }
+        return;
+      }
+
+      // Arrow keys
+      if (e.key === 'ArrowRight' || e.key === 'Tab' && !e.shiftKey) {
+        e.preventDefault();
+        if (num < 1) AnswerGrid.setFocus(1);
+        else if (num < totalQ) AnswerGrid.setFocus(num + 1);
+        return;
+      }
+      if (e.key === 'ArrowLeft' || (e.key === 'Tab' && e.shiftKey)) {
+        e.preventDefault();
+        if (num > 1) AnswerGrid.setFocus(num - 1);
+        return;
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const cols = getGridCols();
+        const next = num + cols;
+        if (next <= totalQ) AnswerGrid.setFocus(next);
+        return;
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const cols = getGridCols();
+        const prev = num - cols;
+        if (prev >= 1) AnswerGrid.setFocus(prev);
+        return;
+      }
+
+      // Delete / Backspace
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault();
+        if (num >= 1) AnswerGrid.clearAnswer(num);
+        return;
+      }
+
+      // Home / End
+      if (e.key === 'Home') { e.preventDefault(); AnswerGrid.setFocus(1); return; }
+      if (e.key === 'End') { e.preventDefault(); AnswerGrid.setFocus(totalQ); return; }
+    });
+
+    // Global shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === ',') {
+        e.preventDefault();
+        App.openSettings();
+      }
+    });
+  }
+};
+
+function getGridCols() {
+  const w = window.innerWidth;
+  if (w <= 600) return 4;
+  if (w <= 900) return 5;
+  return 10;
+}
+
+/* ====================== Grading Module ====================== */
+const Grading = {
+  parseAnswerKey(text) {
+    text = text.trim();
+    if (!text) return [];
+    // Try JSON array
+    if (text.startsWith('[')) {
+      try { return JSON.parse(text).map(Number); } catch {}
+    }
+    // Try comma, space, newline separation
+    const delim = text.includes(',') ? ',' : (text.includes('\n') ? '\n' : /\s+/);
+    return text.split(delim).map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+  },
+
+  grade() {
+    const raw = document.getElementById('answerKeyInput').value;
+    const key = this.parseAnswerKey(raw);
+    const totalQ = AppState.config.totalQ;
+
+    if (key.length === 0) {
+      App.toast('정답 데이터를 입력해주세요.', 'error');
+      return;
+    }
+    if (key.length !== totalQ) {
+      App.toast(`정답 수(${key.length})가 문제 수(${totalQ})와 다릅니다.`, 'error');
+      return;
+    }
+
+    AppState.answerKey = key;
+    AppState.save('answerKey');
+
+    let correct = 0;
+    const wrongs = [];
+    for (let i = 1; i <= totalQ; i++) {
+      const mine = AppState.answers[String(i)];
+      if (mine === key[i - 1]) {
+        correct++;
+      } else {
+        wrongs.push(i);
+      }
+    }
+
+    const score = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+    const pass = score >= AppState.config.passScore;
+
+    // Subject results
+    const subjects = AppState.config.subjects || [];
+    const subjectResults = subjects.map(subj => {
+      let subjCorrect = 0;
+      let subjTotal = 0;
+      for (let i = subj.start; i <= subj.end && i <= totalQ; i++) {
+        subjTotal++;
+        if (AppState.answers[String(i)] === key[i - 1]) subjCorrect++;
+      }
+      const subjScore = subjTotal > 0 ? Math.round((subjCorrect / subjTotal) * 100) : 0;
+      return {
+        name: subj.name,
+        total: subjTotal,
+        correct: subjCorrect,
+        score: subjScore,
+        pass: subjScore >= AppState.config.minScore
+      };
+    });
+
+    const hasSubjectFail = subjectResults.some(s => !s.pass);
+    const finalPass = pass && !hasSubjectFail;
+
+    const result = { correct, total: totalQ, score, pass: finalPass, wrongs, subjectResults };
+    AppState.gradingResult = result;
+    AppState.save('gradingResult');
+
+    this.renderResult(result);
+    AnswerGrid.updateAllCells();
+    Notebook.render();
+    App.toast(`채점 완료: ${score}점 (${correct}/${totalQ})`, finalPass ? 'success' : 'error');
+  },
+
+  renderResult(r) {
+    document.getElementById('gradingResult').style.display = 'block';
+
+    // Animate score
+    const scoreEl = document.getElementById('totalScore');
+    this._animateNumber(scoreEl, r.score);
+
+    document.getElementById('totalScoreLabel').textContent = `${r.correct} / ${r.total} 문제 정답`;
+
+    const prog = document.getElementById('totalProgress');
+    prog.className = 'progress-bar-fill ' + (r.pass ? 'pass' : 'fail');
+    setTimeout(() => { prog.style.width = r.score + '%'; }, 100);
+
+    const badge = document.getElementById('passBadge');
+    badge.innerHTML = r.pass
+      ? '<span class="badge badge-pass">&#10004; 합격</span>'
+      : '<span class="badge badge-fail">&#10008; 불합격</span>';
+
+    // Subject results
+    const subjectSection = document.getElementById('subjectResultSection');
+    if (r.subjectResults && r.subjectResults.length > 0) {
+      subjectSection.style.display = '';
+      const tbody = document.getElementById('subjectResultBody');
+      tbody.innerHTML = r.subjectResults.map(s => `
+        <tr>
+          <td>${s.name}</td>
+          <td>${s.total}</td>
+          <td>${s.correct}</td>
+          <td class="${s.pass ? 'pass-cell' : 'fail-cell'}">${s.score}%</td>
+          <td class="${s.pass ? 'pass-cell' : 'fail-cell'}">${s.pass ? '통과' : '과락'}</td>
+        </tr>
+      `).join('');
+    } else {
+      subjectSection.style.display = 'none';
+    }
+
+    // Compare grid
+    this.renderCompareGrid();
+  },
+
+  renderCompareGrid() {
+    const grid = document.getElementById('compareGrid');
+    const totalQ = AppState.config.totalQ;
+    const key = AppState.answerKey;
+    let html = '';
+    for (let i = 1; i <= totalQ; i++) {
+      const mine = AppState.answers[String(i)];
+      const ans = key[i - 1];
+      const isCorrect = mine === ans;
+      const cls = mine === undefined ? 'cmp-empty' : (isCorrect ? 'cmp-correct' : 'cmp-wrong');
+      html += `<div class="compare-cell ${cls}">
+        <div class="cmp-num">${i}</div>
+        <div class="cmp-ans">${mine || '-'}</div>
+        <div class="cmp-key">${ans !== undefined ? ans : '-'}</div>
+      </div>`;
+    }
+    grid.innerHTML = html;
+  },
+
+  _animateNumber(el, target) {
+    let current = 0;
+    const step = Math.max(1, Math.ceil(target / 30));
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(interval); }
+      el.textContent = current;
+    }, 30);
+  },
+
+  restoreResult() {
+    if (AppState.gradingResult) {
+      if (AppState.answerKey.length > 0) {
+        document.getElementById('answerKeyInput').value = AppState.answerKey.join(', ');
+      }
+      this.renderResult(AppState.gradingResult);
+    }
+  }
+};
+
+/* ====================== MarkdownRenderer Module ====================== */
+const MarkdownRenderer = {
+  render(text) {
+    if (!text) return '';
+    let html = this._escape(text);
+
+    // Code blocks
+    html = html.replace(/```([\s\S]*?)```/g, (_, code) => `<pre><code>${code.trim()}</code></pre>`);
+    // Inline code
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Headings
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+    // Bold
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Italic
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    // Blockquote
+    html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+    // Links
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // Images
+    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+    // Unordered lists
+    html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`);
+    // Ordered lists
+    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+    // Line breaks
+    html = html.replace(/\n/g, '<br>');
+    // Clean up extra <br> around block elements
+    html = html.replace(/<br>\s*(<\/?(?:h[1-3]|ul|ol|li|pre|blockquote|div))/g, '$1');
+    html = html.replace(/(<\/(?:h[1-3]|ul|ol|li|pre|blockquote|div)>)\s*<br>/g, '$1');
+
+    return html;
+  },
+
+  _escape(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+};
+
+/* ====================== Notebook Module ====================== */
+const Notebook = {
+  currentFilter: 'all',
+
+  render() {
+    const result = AppState.gradingResult;
+    if (!result || !result.wrongs || result.wrongs.length === 0) {
+      document.getElementById('notebookCards').innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128218;</div><div class="empty-state-text">채점을 완료하면 틀린 문제가 여기에 표시됩니다.</div></div>';
+      document.getElementById('notebookFilter').innerHTML = '';
+      return;
+    }
+
+    // Render filter
+    this.renderFilter(result.wrongs);
+    // Render cards
+    this.renderCards(result.wrongs);
+  },
+
+  renderFilter(wrongs) {
+    const subjects = AppState.config.subjects || [];
+    const bar = document.getElementById('notebookFilter');
+    if (subjects.length === 0) { bar.innerHTML = ''; return; }
+
+    let html = `<div class="filter-chip ${this.currentFilter === 'all' ? 'active' : ''}" onclick="Notebook.filter('all')">전체 (${wrongs.length})</div>`;
+    subjects.forEach(s => {
+      const cnt = wrongs.filter(n => n >= s.start && n <= s.end).length;
+      html += `<div class="filter-chip ${this.currentFilter === s.name ? 'active' : ''}" onclick="Notebook.filter('${s.name}')">${s.name} (${cnt})</div>`;
+    });
+    bar.innerHTML = html;
+  },
+
+  filter(name) {
+    this.currentFilter = name;
+    const result = AppState.gradingResult;
+    if (result) {
+      this.renderFilter(result.wrongs);
+      this.renderCards(result.wrongs);
+    }
+  },
+
+  renderCards(wrongs) {
+    const subjects = AppState.config.subjects || [];
+    let filtered = wrongs;
+    if (this.currentFilter !== 'all' && subjects.length > 0) {
+      const subj = subjects.find(s => s.name === this.currentFilter);
+      if (subj) filtered = wrongs.filter(n => n >= subj.start && n <= subj.end);
+    }
+
+    if (filtered.length === 0) {
+      document.getElementById('notebookCards').innerHTML = '<div class="empty-state"><div class="empty-state-text">이 과목에는 틀린 문제가 없습니다.</div></div>';
+      return;
+    }
+
+    const html = filtered.map(num => {
+      const mine = AppState.answers[String(num)];
+      const correct = AppState.answerKey[num - 1];
+      const note = AppState.notes[String(num)] || {};
+      const subj = subjects.find(s => num >= s.start && num <= s.end);
+
+      return `<div class="note-card" id="noteCard${num}">
+        <div class="note-card-header">
+          <div>
+            <span class="note-card-num">문제 ${num}</span>
+            ${subj ? `<span style="font-size:12px;color:var(--text-light);margin-left:8px;">${subj.name}</span>` : ''}
+          </div>
+          <div class="note-card-answers">
+            내 답: <span class="my-ans">${mine || '미입력'}</span> &nbsp;|&nbsp; 정답: <span class="correct-ans">${correct}</span>
+          </div>
+        </div>
+        <div class="memo-area">
+          <div class="memo-toggle">
+            <button class="memo-toggle-btn active" onclick="Notebook.toggleMemo(${num},'edit')">편집</button>
+            <button class="memo-toggle-btn" onclick="Notebook.toggleMemo(${num},'preview')">미리보기</button>
+          </div>
+          <textarea class="memo-editor" id="memo${num}" placeholder="메모를 입력하세요 (마크다운 지원)..." oninput="Notebook.saveMemo(${num})">${note.memo || ''}</textarea>
+          <div class="memo-preview" id="memoPrev${num}" style="display:none;"></div>
+        </div>
+        <div class="screenshot-area">
+          <div class="screenshot-actions">
+            <label class="btn btn-sm btn-outline" style="cursor:pointer;">
+              &#128247; 파일 선택
+              <input type="file" accept="image/*" style="display:none;" onchange="Notebook.addScreenshot(${num}, event)">
+            </label>
+            <button class="btn btn-sm btn-outline" onclick="Notebook.pasteScreenshot(${num})">&#128203; 클립보드</button>
+            <button class="btn btn-sm btn-outline" onclick="Notebook.addUrlScreenshot(${num})">&#128279; URL</button>
+          </div>
+          <div class="screenshot-thumbs" id="ssThumbs${num}"></div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('notebookCards').innerHTML = html;
+
+    // Load screenshots
+    filtered.forEach(num => this.loadScreenshots(num));
+  },
+
+  toggleMemo(num, mode) {
+    const editor = document.getElementById('memo' + num);
+    const preview = document.getElementById('memoPrev' + num);
+    const card = document.getElementById('noteCard' + num);
+    const btns = card.querySelectorAll('.memo-toggle-btn');
+
+    if (mode === 'edit') {
+      editor.style.display = '';
+      preview.style.display = 'none';
+      btns[0].classList.add('active');
+      btns[1].classList.remove('active');
+    } else {
+      editor.style.display = 'none';
+      preview.style.display = '';
+      preview.innerHTML = MarkdownRenderer.render(editor.value);
+      btns[0].classList.remove('active');
+      btns[1].classList.add('active');
+    }
+  },
+
+  saveMemo(num) {
+    const text = document.getElementById('memo' + num).value;
+    if (!AppState.notes[String(num)]) AppState.notes[String(num)] = {};
+    AppState.notes[String(num)].memo = text;
+    AppState.save('notes');
+  },
+
+  async addScreenshot(num, event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const data = e.target.result;
+      await this._saveScreenshot(num, data);
+    };
+    reader.readAsDataURL(file);
+  },
+
+  async pasteScreenshot(num) {
+    try {
+      const items = await navigator.clipboard.read();
+      for (const item of items) {
+        const types = item.types.filter(t => t.startsWith('image/'));
+        if (types.length > 0) {
+          const blob = await item.getType(types[0]);
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            await this._saveScreenshot(num, e.target.result);
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+      App.toast('클립보드에 이미지가 없습니다.', 'error');
+    } catch {
+      App.toast('클립보드 접근이 거부되었습니다.', 'error');
+    }
+  },
+
+  async addUrlScreenshot(num) {
+    const url = prompt('이미지 URL을 입력하세요:');
+    if (!url) return;
+    await this._saveScreenshot(num, url, true);
+  },
+
+  async _saveScreenshot(num, data, isUrl) {
+    if (!AppState.notes[String(num)]) AppState.notes[String(num)] = {};
+    if (!AppState.notes[String(num)].screenshots) AppState.notes[String(num)].screenshots = [];
+    const ssId = `ss_${num}_${Date.now()}`;
+    AppState.notes[String(num)].screenshots.push(ssId);
+    AppState.save('notes');
+
+    if (isUrl) {
+      await ImageDB.put(ssId, { type: 'url', url: data });
+    } else {
+      await ImageDB.put(ssId, { type: 'base64', data });
+    }
+    this.loadScreenshots(num);
+    App.toast('스크린샷이 추가되었습니다.', 'success');
+  },
+
+  async loadScreenshots(num) {
+    const note = AppState.notes[String(num)];
+    const thumbsEl = document.getElementById('ssThumbs' + num);
+    if (!thumbsEl) return;
+    if (!note || !note.screenshots || note.screenshots.length === 0) {
+      thumbsEl.innerHTML = '';
+      return;
+    }
+    let html = '';
+    for (const ssId of note.screenshots) {
+      const ssData = await ImageDB.get(ssId);
+      if (!ssData) continue;
+      const src = ssData.type === 'url' ? ssData.url : ssData.data;
+      html += `<div class="screenshot-thumb" onclick="Notebook.showLightbox('${ssId}')">
+        <img src="${src}" loading="lazy">
+        <button class="remove-ss" onclick="event.stopPropagation();Notebook.removeScreenshot(${num},'${ssId}')">&times;</button>
+      </div>`;
+    }
+    thumbsEl.innerHTML = html;
+  },
+
+  async showLightbox(ssId) {
+    const ssData = await ImageDB.get(ssId);
+    if (!ssData) return;
+    const src = ssData.type === 'url' ? ssData.url : ssData.data;
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('active');
+  },
+
+  async removeScreenshot(num, ssId) {
+    const note = AppState.notes[String(num)];
+    if (note && note.screenshots) {
+      note.screenshots = note.screenshots.filter(id => id !== ssId);
+      AppState.save('notes');
+    }
+    await ImageDB.remove(ssId);
+    this.loadScreenshots(num);
+    App.toast('스크린샷이 삭제되었습니다.', 'info');
+  }
+};
+
+/* ====================== DataIO Module ====================== */
+const DataIO = {
+  async exportJSON() {
+    const data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      config: AppState.config,
+      answers: AppState.answers,
+      answerKey: AppState.answerKey,
+      gradingResult: AppState.gradingResult,
+      notes: AppState.notes,
+      screenshots: []
+    };
+
+    // Export screenshots from IndexedDB
+    try {
+      const allSS = await ImageDB.getAll();
+      data.screenshots = allSS;
+    } catch {}
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `exam_${AppState.config.examName || 'data'}_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    App.toast('데이터가 내보내기되었습니다.', 'success');
+  },
+
+  triggerImport() {
+    document.getElementById('importFile').click();
+  },
+
+  async importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!data.config || !data.answers) {
+        App.toast('잘못된 파일 형식입니다.', 'error');
+        return;
+      }
+      AppState.config = data.config;
+      AppState.answers = data.answers || {};
+      AppState.answerKey = data.answerKey || [];
+      AppState.gradingResult = data.gradingResult || null;
+      AppState.notes = data.notes || {};
+      AppState.save();
+
+      // Import screenshots
+      if (data.screenshots && data.screenshots.length > 0) {
+        await ImageDB.clearAll();
+        for (const ss of data.screenshots) {
+          await ImageDB.put(ss.id, ss.data);
+        }
+      }
+
+      App.refreshAll();
+      App.toast('데이터를 불러왔습니다.', 'success');
+    } catch (err) {
+      App.toast('파일 불러오기 실패: ' + err.message, 'error');
+    }
+    event.target.value = '';
+  }
+};
+
+/* ====================== App Module ====================== */
+const App = {
+  init() {
+    AppState.load();
+    KeyboardNav.init();
+    this.refreshAll();
+
+    // Show settings if first visit
+    if (!AppState.config.examName && AppState.config.totalQ === 100 && Object.keys(AppState.answers).length === 0) {
+      // Check if there's actually saved config
+      if (!Storage.get('config')) {
+        this.openSettings();
+      }
+    }
+  },
+
+  refreshAll() {
+    this.updateHeaderTitle();
+    this.updateConfigSummary();
+    AnswerGrid.render();
+    Grading.restoreResult();
+    Notebook.render();
+  },
+
+  updateHeaderTitle() {
+    const name = AppState.config.examName;
+    document.getElementById('headerTitle').textContent = name ? `Exam Master - ${name}` : 'Exam Master';
+  },
+
+  updateConfigSummary() {
+    const c = AppState.config;
+    if (!c.examName && !Storage.get('config')) {
+      document.getElementById('configSummary').textContent = '설정이 없습니다. [설정] 버튼을 눌러 시험을 설정하세요.';
+      return;
+    }
+    const subjects = c.subjects && c.subjects.length > 0
+      ? c.subjects.map(s => `${s.name}(${s.start}-${s.end})`).join(', ')
+      : '단일 과목';
+    document.getElementById('configSummary').innerHTML =
+      `<strong>${c.examName || '미정'}</strong> | ${c.totalQ}문항 | ${c.choices}지선다 | 합격 ${c.passScore}% | 과락 ${c.minScore}%<br><span style="font-size:12px;">과목: ${subjects}</span>`;
+  },
+
+  switchTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+    if (name === 'notebook') Notebook.render();
+  },
+
+  openSettings() {
+    ExamSetup.loadToModal();
+    document.getElementById('settingsModal').classList.add('active');
+  },
+
+  closeSettings() {
+    document.getElementById('settingsModal').classList.remove('active');
+  },
+
+  resetAll() {
+    if (!confirm('모든 데이터를 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) return;
+    AppState.reset();
+    ImageDB.clearAll().catch(() => {});
+    this.refreshAll();
+    document.getElementById('answerKeyInput').value = '';
+    document.getElementById('gradingResult').style.display = 'none';
+    App.toast('모든 데이터가 초기화되었습니다.', 'info');
+  },
+
+  toast(msg, type) {
+    const container = document.getElementById('toastContainer');
+    const el = document.createElement('div');
+    el.className = `toast toast-${type || 'info'}`;
+    el.textContent = msg;
+    container.appendChild(el);
+    setTimeout(() => { if (el.parentElement) el.remove(); }, 3000);
+  }
+};
+
+// Close modal on backdrop click
+document.getElementById('settingsModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) App.closeSettings();
+});
+
+// Init
+App.init();
+</script>
+</body>
+</html>
